@@ -6,6 +6,13 @@ export const routes: Routes = [
     },
 
     {
+        path: 'register', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
+    },
+    {
+        path: 'usuarios', loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+    },
+
+    {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'

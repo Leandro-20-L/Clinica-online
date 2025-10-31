@@ -2,38 +2,101 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import {MatSnackBar,MatSnackBarModule} from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
+import { UsuariosService } from '../../services/usuarios.service';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule, MatSnackBarModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   loginForm: FormGroup;
+    email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
+  loading: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router, 
+    private snackBar: MatSnackBar, 
+    private authService: AuthService,
+    private usuariosService: UsuariosService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
 
-  onLogin() {
-    if (this.loginForm.valid) {
-      console.log('Datos enviados:', this.loginForm.value);
-      // acá iría la lógica real de autenticación
+  async onLogin() {
+     if (!this.loginForm.valid) return;
+
+  const { email, password } = this.loginForm.value;
+
+  try {
+    const user = await this.authService.logIn(email, password);
+    const verified = await this.authService.isEmailVerified(); 
+
+   
+    const usuario = await this.usuariosService.obtenerPorUID(user.id);
+    if (verified && !usuario.verificado) {
+      await this.usuariosService.actualizar(user.id, { verificado: true });
+      usuario.verificado = true; 
     }
+
+   
+    if (!usuario.verificado) {
+      this.snackBar.open('Debe verificar su correo antes de ingresar.', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snackbar-error'],
+      });
+      await this.authService.logOut();
+      return;
+    }
+
+    if (usuario.rol === 'especialista' && !usuario.habilitado) {
+      this.snackBar.open('Su cuenta aún no fue aprobada por el administrador.', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snackbar-error'],
+      });
+      return;
+    }
+
+    // 🔹 Mensaje y redirección
+    this.snackBar.open(`Bienvenido ${usuario.nombre}`, 'Cerrar', {
+      duration: 3000,
+      panelClass: ['snackbar-success'],
+    });
+
+    switch (usuario.rol) {
+      case 'admin':
+        this.router.navigate(['/usuarios']);
+        break;
+      case 'especialista':
+        this.router.navigate(['/dashboard-especialista']);
+        break;
+      case 'paciente':
+        this.router.navigate(['/dashboard-paciente']);
+        break;
+    }
+
+  } catch (error: any) {
+    this.snackBar.open(error.message || 'Correo o contraseña incorrectos', 'Cerrar', {
+      duration: 3500,
+      panelClass: ['snackbar-error'],
+    });
+  }
   }
 
-  autocompletar(tipo: string) {
-    if (tipo === 'paciente') {
-      this.loginForm.setValue({ email: 'paciente@clinica.com', password: '123456' });
-    } else if (tipo === 'especialista') {
-      this.loginForm.setValue({ email: 'especialista@clinica.com', password: '123456' });
-    } else if (tipo === 'admin') {
-      this.loginForm.setValue({ email: 'admin@clinica.com', password: '123456' });
-    }
+  llenarUsers(email:string,password:string){
+  this.loginForm.patchValue({
+    email: email,
+    password: password
+  });
   }
 
    goToRegister() {

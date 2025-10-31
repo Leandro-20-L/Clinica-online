@@ -1,0 +1,71 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Panel de Administración</h1>
+
+    <div class="user-info">
+      <span class="admin-name"> {{ adminName }}</span>
+      <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <section class="summary-cards">
+    <div class="card">
+      <h3>Total Usuarios</h3>
+      <p>{{ totalUsuarios }}</p>
+    </div>
+    <div class="card">
+      <h3>Pacientes</h3>
+      <p>{{ totalPacientes }}</p>
+    </div>
+    <div class="card">
+      <h3>Especialistas</h3>
+      <p>{{ totalEspecialistas }}</p>
+    </div>
+  </section>
+
+  <section class="usuarios-section">
+    <div class="section-header">
+      <h2>Gestión de Usuarios</h2>
+      <button class="btn-new-user" (click)="abrirModalNuevoUsuario()">+ Nuevo Usuario</button>
+    </div>
+
+    <table class="usuarios-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Verificado</th>
+          <th>Habilitado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let user of usuarios">
+          <td>{{ user.nombre }} {{ user.apellido }}</td>
+          <td>{{ user.mail }}</td>
+          <td>{{ user.rol | titlecase }}</td>
+          <td>
+            <span class="badge" [class.badge-true]="user.verificado" [class.badge-false]="!user.verificado">
+              {{ user.verificado ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [class.badge-true]="user.habilitado" [class.badge-false]="!user.habilitado">
+              {{ user.habilitado ? 'Sí' : 'No' }}
+            </span>
+          </td>
+          <td class="acciones">
+            <button class="btn-action btn-green" (click)="habilitar(user.uid)" *ngIf="!user.habilitado">
+              Habilitar
+            </button>
+            <button class="btn-action btn-red" (click)="deshabilitar(user.uid)" *ngIf="user.habilitado">
+              Deshabilitar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
