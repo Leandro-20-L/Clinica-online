@@ -24,10 +24,11 @@ export class DashboardPacienteComponent {
   async ngOnInit() {
     const uid = await this.authService.getUserUid();
     this.paciente = await this.usuariosService.obtenerPorUID(uid!);
-    // 🔹 Podrías cargar turnos reales desde otra tabla
+    
     this.turnos = [];
   }
 
+  //nose
   abrirPerfil() {
     Swal.fire({
       title: 'Mi Perfil',

@@ -3,7 +3,7 @@
     <h1>Panel de Administración</h1>
 
     <div class="user-info">
-      <span class="admin-name"> {{ adminName }}</span>
+      <span class="admin-name">👤 {{ adminName }}</span>
       <button class="btn-logout" (click)="logout()">Cerrar sesión</button>
     </div>
   </header>
@@ -14,10 +14,6 @@
       <p>{{ totalUsuarios }}</p>
     </div>
     <div class="card">
-      <h3>Pacientes</h3>
-      <p>{{ totalPacientes }}</p>
-    </div>
-    <div class="card">
       <h3>Especialistas</h3>
       <p>{{ totalEspecialistas }}</p>
     </div>
@@ -25,8 +21,8 @@
 
   <section class="usuarios-section">
     <div class="section-header">
-      <h2>Gestión de Usuarios</h2>
-      <button class="btn-new-user" (click)="abrirModalNuevoUsuario()">+ Nuevo Usuario</button>
+      <h2>Gestión de Especialistas</h2>
+      <button class="btn-new-user" (click)="abrirModalNuevoUsuario()">+ Nuevo Especialista</button>
     </div>
 
     <table class="usuarios-table">
@@ -34,7 +30,7 @@
         <tr>
           <th>Nombre</th>
           <th>Email</th>
-          <th>Rol</th>
+          <th>Especialidad</th>
           <th>Verificado</th>
           <th>Habilitado</th>
           <th>Acciones</th>
@@ -45,7 +41,7 @@
         <tr *ngFor="let user of usuarios">
           <td>{{ user.nombre }} {{ user.apellido }}</td>
           <td>{{ user.mail }}</td>
-          <td>{{ user.rol | titlecase }}</td>
+          <td>{{ user.especialidad || 'Sin asignar' }}</td>
           <td>
             <span class="badge" [class.badge-true]="user.verificado" [class.badge-false]="!user.verificado">
               {{ user.verificado ? 'Sí' : 'No' }}
