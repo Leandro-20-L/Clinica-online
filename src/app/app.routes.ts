@@ -11,6 +11,9 @@ export const routes: Routes = [
     {
         path: 'usuarios', loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
     },
+    {
+        path: 'dashboard-paciente', loadComponent: () => import('./components/dashboard-paciente/dashboard-paciente.component').then(m => m.DashboardPacienteComponent)
+    },
 
     {
         path: '',

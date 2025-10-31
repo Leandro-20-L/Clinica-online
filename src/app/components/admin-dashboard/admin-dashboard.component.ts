@@ -28,10 +28,11 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   async cargarUsuarios() {
-    this.usuarios = await this.usuariosService.obtenerTodos();
+    const todos = await this.usuariosService.obtenerTodos();
     this.totalUsuarios = this.usuarios.length;
     this.totalPacientes = this.usuarios.filter(u => u.rol === 'paciente').length;
     this.totalEspecialistas = this.usuarios.filter(u => u.rol === 'especialista').length;
+    this.usuarios = todos.filter(u => u.rol === 'especialista');
   }
 
   async habilitar(uid: string) {
