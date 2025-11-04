@@ -70,7 +70,6 @@ export class RegisterComponent {
   }
 
   const data = { ...this.registerForm.value };
-
  
   if (data.especialidad === 'otra' && data.nuevaEspecialidad) {
     data.especialidad = data.nuevaEspecialidad.trim();
@@ -128,9 +127,7 @@ export class RegisterComponent {
       habilitado: this.rolSeleccionado === 'paciente', // especialista espera aprobación
     };
 
-    
     await this.usuariosService.insertar(nuevoUsuario);
-
     
     Swal.fire({
       icon: 'success',

@@ -14,6 +14,9 @@ export const routes: Routes = [
     {
         path: 'dashboard-paciente', loadComponent: () => import('./components/dashboard-paciente/dashboard-paciente.component').then(m => m.DashboardPacienteComponent)
     },
+    {
+        path: 'bienvenida', loadComponent: () => import('./components/bienvenida/bienvenida.component').then(m => m.BienvenidaComponent)
+    },
 
     {
         path: '',

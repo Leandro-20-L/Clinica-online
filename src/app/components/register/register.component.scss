@@ -1,10 +1,21 @@
+body {
+  background-image: url('/fondo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
 .register-container {
+   min-height: 100vh;
+  background-image: url('/fondo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #e6f0ff 0%, #ffffff 100%);
-  font-family: 'Poppins', sans-serif;
 }
 
 .register-card {
@@ -14,6 +25,7 @@
   padding: 2.5rem;
   width: 440px;
   text-align: center;
+  position: relative;
 }
 
 .title {
@@ -27,38 +39,51 @@
   font-weight: 500;
 }
 
+
 .seleccion-rol {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
   align-items: center;
+  gap: 1.2rem;
 
-  .rol-btn {
-    width: 100%;
+  .roles {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 0.8rem;
-    border: 2px solid #007acc;
-    background-color: #f5f9ff;
-    border-radius: 12px;
-    padding: 1rem;
-    cursor: pointer;
-    font-weight: bold;
-    color: #004080;
-    transition: all 0.3s ease;
+    gap: 3rem;
 
-    img {
-      width: 36px;
-      height: 36px;
-    }
+    .rol-btn {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #007acc;
+      background-color: #f5f9ff;
+      box-shadow: 0 4px 8px rgba(0, 122, 204, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
 
-    &:hover {
-      background-color: #007acc;
-      color: #fff;
       img {
-        filter: brightness(0) invert(1);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
+
+      &:hover {
+        transform: scale(1.08);
+        border-color: #004080;
+        box-shadow: 0 0 15px rgba(0, 64, 128, 0.4);
+      }
+    }
+  }
+
+  .roles-nombres {
+    display: flex;
+    justify-content: center;
+    gap: 3.5rem;
+    span {
+      font-weight: 600;
+      color: #004080;
+      margin-top: 0.5rem;
     }
   }
 
@@ -74,6 +99,7 @@
     }
   }
 }
+
 
 .form-group {
   text-align: left;
@@ -101,6 +127,7 @@
     }
   }
 }
+
 
 .btn-register {
   background-color: #007acc;
@@ -138,3 +165,4 @@
   justify-content: space-between;
   margin-top: 1rem;
 }
+
