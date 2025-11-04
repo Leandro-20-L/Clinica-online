@@ -100,6 +100,18 @@ body {
   }
 }
 
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 1.2rem 1.5rem; 
+  column-gap: 1.2rem;
+  row-gap: 1.5rem; 
+  
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr; 
+  }
+}
 
 .form-group {
   text-align: left;
@@ -166,3 +178,24 @@ body {
   margin-top: 1rem;
 }
 
+
+.captcha-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 1.5rem 0;
+}
+
+.preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 10px;
+  border: 2px solid #007acc;
+  box-shadow: 0 0 8px rgba(0, 64, 128, 0.2);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}

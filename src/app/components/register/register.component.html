@@ -23,9 +23,11 @@
     <form *ngIf="rolSeleccionado" [formGroup]="registerForm" (ngSubmit)="onRegister()">
       <h3 class="subtitle">Registro de {{ rolSeleccionado | titlecase }}</h3>
 
+      <div class="form-grid">
       <div class="form-group" *ngFor="let campo of camposComunes">
         <label>{{ campo.label }}</label>
         <input [type]="campo.type" [formControlName]="campo.control" [placeholder]="campo.placeholder" />
+      </div>
       </div>
 
       <ng-container *ngIf="rolSeleccionado === 'paciente'">
@@ -35,11 +37,14 @@
         </div>
         <div class="form-group">
           <label>Imagen de perfil 1</label>
-          <input type="file" (change)="onFileChange($event, 1)" />
+          
+           <input type="file" accept="image/*" (change)="onFileChange($event, 1)" />
+            <img *ngIf="imagenesPreview[0]" [src]="imagenesPreview[0]" class="preview-img" />
         </div>
         <div class="form-group">
           <label>Imagen de perfil 2</label>
-          <input type="file" (change)="onFileChange($event, 2)" />
+          <input type="file" accept="image/*" (change)="onFileChange($event, 2)" />
+            <img *ngIf="imagenesPreview[1]" [src]="imagenesPreview[1]" class="preview-img" />
         </div>
       </ng-container>
 
@@ -59,9 +64,18 @@
 
         <div class="form-group">
           <label>Imagen de perfil</label>
-          <input type="file" (change)="onFileChange($event, 1)" />
+          <input type="file" accept="image/*" (change)="onFileChange($event, 1)" />
+            <img *ngIf="imagenesPreview[0]" [src]="imagenesPreview[0]" class="preview-img" />
         </div>
       </ng-container>
+
+      <div class="form-group captcha-container">
+        <re-captcha
+            [siteKey]="siteKey"
+            (resolved)="onCaptchaResolved($event)">
+        </re-captcha>
+        </div>
+
 
       <div class="botones-form">
         <button type="submit" [disabled]="registerForm.invalid" class="btn-register">

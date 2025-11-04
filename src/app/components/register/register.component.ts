@@ -5,10 +5,13 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 import Swal from 'sweetalert2';
+import {  RecaptchaModule } from 'ng-recaptcha';
+import { environment } from '../../../environments/environments';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule,CommonModule,RecaptchaModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -17,6 +20,10 @@ export class RegisterComponent {
   rolSeleccionado: string | null = null;
   especialidades = ['Cardiología', 'Pediatría', 'Dermatología', 'Neurología'];
   imagenes: File[] = [];
+  
+  imagenesPreview: string[] = [];
+   captchaValido = false;
+  siteKey = environment.RECAPTCHA_SITE_KEY;
 
   camposComunes = [
     { label: 'Nombre', type: 'text', control: 'nombre', placeholder: 'Ingrese su nombre' },
@@ -56,11 +63,27 @@ export class RegisterComponent {
   cancelarRol() {
     this.rolSeleccionado = null;
     this.registerForm.reset();
+    this.imagenes = [];
+    this.imagenesPreview = [];
+
   }
 
   onFileChange(event: any, index: number) {
     const file = event.target.files[0];
-    if (file) this.imagenes[index - 1] = file;
+    if (file) {
+      this.imagenes[index - 1] = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenesPreview[index - 1] = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onCaptchaResolved(token: string | null): void {
+    
+    this.captchaValido = !!token;
   }
 
   async onRegister() {
@@ -68,6 +91,11 @@ export class RegisterComponent {
     Swal.fire('Error', 'Debe completar todos los campos requeridos', 'error');
     return;
   }
+
+  if (!this.captchaValido) {
+      Swal.fire('Error', 'Debe completar el reCAPTCHA', 'error');
+      return;
+    }
 
   const data = { ...this.registerForm.value };
  
@@ -91,7 +119,6 @@ export class RegisterComponent {
     let imagen1: string | null = null;
     let imagen2: string | null = null;
 
-    
     if (this.rolSeleccionado === 'paciente') {
       if (this.imagenes.length < 2) {
         Swal.fire('Error', 'Debe seleccionar 2 imágenes para registrarse como paciente.', 'error');
@@ -110,7 +137,6 @@ export class RegisterComponent {
       imagen1 = await this.usuariosService.subirFoto(`especialistas/${uid}-perfil.png`, this.imagenes[0]);
     }
 
-   
     const nuevoUsuario = {
       uid: uid,
       nombre: data.nombre,
