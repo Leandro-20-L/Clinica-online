@@ -1,0 +1,84 @@
+.solicitar-container {
+  text-align: center;
+  max-width: 600px;
+  margin: auto;
+
+  h2 {
+    color: #007acc;
+    margin-bottom: 1rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+
+    button {
+      background: #e8f4ff;
+      border: 2px solid #007acc;
+      border-radius: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: #004c80;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #007acc;
+        color: white;
+      }
+
+      img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  input {
+    margin: 0.5rem;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #b0c4de;
+  }
+}
+
+.dias-grid, .horas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+
+  button {
+    background: #e8f4ff;
+    border: 2px solid #007acc;
+    border-radius: 8px;
+    padding: 0.6rem;
+    cursor: pointer;
+    color: #004c80;
+    font-weight: 600;
+    transition: 0.2s;
+
+    &.activo, &:hover {
+      background: #007acc;
+      color: #fff;
+    }
+  }
+}
+
+.btn-confirmar {
+  background: #22c55e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background: #16a34a;
+  }
+}

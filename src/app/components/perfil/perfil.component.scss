@@ -1,0 +1,76 @@
+.perfil-card {
+  max-width: 400px;
+  margin: 3rem auto;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 80, 160, 0.15);
+  text-align: center;
+  padding: 2rem 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  color: #1e293b;
+
+  .perfil-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #007acc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    color: #004080;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    margin: 0.3rem 0;
+    strong {
+      color: #007acc;
+    }
+  }
+
+  
+  .rol-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 12px;
+    margin-top: 0.8rem;
+    color: #fff;
+  }
+
+  .paciente {
+    background-color: #0ea5e9;
+  }
+  .especialista {
+    background-color: #22c55e;
+  }
+  .admin {
+    background-color: #f97316;
+  }
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  //background: #ef4444;
+  border: none;
+  //color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    background: #dc2626;
+    transform: scale(1.1);
+  }
+}

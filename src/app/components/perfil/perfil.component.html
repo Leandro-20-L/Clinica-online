@@ -1,0 +1,38 @@
+<div class="perfil-card">
+  <img [src]="usuario?.imagen1 || 'assets/imgs/default-user.png'" alt="Foto de perfil" class="perfil-img" />
+
+  <h2>{{ usuario?.nombre }} {{ usuario?.apellido }}</h2>
+
+  <span
+    class="rol-badge"
+    [ngClass]="{
+      paciente: rol === 'paciente',
+      especialista: rol === 'especialista',
+      admin: rol === 'admin'
+    }"
+  >
+    {{ rol | titlecase }}
+  </span>
+
+  <p><strong>DNI:</strong> {{ usuario?.dni }}</p>
+  <p><strong>Correo:</strong> {{ usuario?.mail }}</p>
+
+  
+  <p *ngIf="rol === 'paciente' && usuario?.obra_social">
+    <strong>Obra Social:</strong> {{ usuario.obra_social }}
+  </p>
+
+  
+  <p *ngIf="rol === 'especialista'">
+    <strong>Especialidad:</strong> {{ usuario?.especialidad }}
+  </p>
+
+  
+  <p *ngIf="rol === 'admin'">
+    <strong>Rol:</strong> Administrador del sistema
+  </p>
+
+  <button class="btn-cerrar" (click)="volver()">
+  <img src="salir.svg" alt="">
+</button>
+</div>

@@ -1,0 +1,21 @@
+<div class="turnos-container">
+  <h2>Mis turnos</h2>
+
+  <div *ngIf="turnos.length; else noTurnos">
+    <div class="turno-card" *ngFor="let turno of turnos">
+      <h3>{{ turno.especialidad }}</h3>
+      <p><strong>Fecha:</strong> {{ turno.fecha }}</p>
+      <p><strong>Hora:</strong> {{ turno.hora }}</p>
+      <p><strong>Estado:</strong> {{ turno.estado }}</p>
+      <p><strong>Especialista:</strong> {{ turno.usuarios?.nombre }} {{ turno.usuarios?.apellido }}</p>
+
+      <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)" class="btn-cancelar">
+        Cancelar
+      </button>
+    </div>
+  </div>
+
+  <ng-template #noTurnos>
+    <p class="sin-turnos">No posee turnos cargados.</p>
+  </ng-template>
+</div>

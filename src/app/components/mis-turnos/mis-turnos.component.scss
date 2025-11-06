@@ -1,0 +1,42 @@
+.turnos-container {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+
+  .turno-card {
+    background: #fff;
+    border: 1px solid #dbeafe;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: 0.2s;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    h3 {
+      color: #007acc;
+      margin-bottom: 0.3rem;
+    }
+
+    .btn-cancelar {
+      background: #ef4444;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &:hover {
+        background: #dc2626;
+      }
+    }
+  }
+
+  .sin-turnos {
+    color: #64748b;
+  }
+}

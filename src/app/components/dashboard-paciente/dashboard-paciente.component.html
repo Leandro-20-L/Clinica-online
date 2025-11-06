@@ -1,37 +1,43 @@
 <div class="dashboard-container">
+  
   <header class="dashboard-header">
-    <h1>Bienvenido, {{ paciente?.nombre }}</h1>
-    <p>👨‍⚕️ Clínica Online - Portal del Paciente</p>
-  </header>
-
-  <section class="contenido">
-    <h2>Mis turnos</h2>
-
-    <div class="turnos-lista" *ngIf="turnos.length; else noTurnos">
-      <div class="turno-card" *ngFor="let turno of turnos">
-        <h3>{{ turno.especialidad }}</h3>
-        <p><strong>Fecha:</strong> {{ turno.fecha | date:'shortDate' }}</p>
-        <p><strong>Especialista:</strong> {{ turno.especialista }}</p>
-      </div>
+    <div class="header-left">
+      <h1>Bienvenido, {{ paciente?.nombre }}</h1>
+      <p>Clínica Online - Portal del Paciente</p>
     </div>
 
-    <ng-template #noTurnos>
-      <p class="sin-turnos">No posee turnos cargados.</p>
-    </ng-template>
+   
+    <button class="perfil-btn" (click)="perfil()">
+      <img src="usuarios/user.svg" alt="Perfil" />
+    </button>
+  </header>
+
+ 
+  <section class="contenido">
+    <h2>Mis opciones</h2>
+
+    <div class="opciones-grid">
+      <button class="opcion" (click)="irA('solicitar')">
+        <img src="svgs/turnos.svg" alt="Turnos" />
+        <span>Solicitar Turno</span>
+      </button>
+
+      <button class="opcion" (click)="irA('turnos')">
+        <img src="svgs/turnos.svg" alt="Turnos" />
+        <span>Mis Turno</span>
+      </button>
+
+      <button class="opcion" (click)="irA('encuesta')">
+        <img src="svgs/encuesta.svg" alt="Encuesta" />
+        <span>Encuesta</span>
+      </button>
+
+      <button class="opcion" (click)="logout()">
+        <img src="svgs/logout.svg" alt="Salir" />
+        <span>Cerrar Sesión</span>
+      </button>
+    </div>
+
+    <router-outlet></router-outlet>
   </section>
-
-  <!-- 🔹 Botones flotantes -->
-  <div class="fab-container">
-    <button class="fab perfil" (click)="abrirPerfil()">
-      <i class="fa-solid fa-user"></i>
-    </button>
-
-    <button class="fab solicitar" (click)="solicitarTurno()">
-      <i class="fa-solid fa-calendar-plus"></i>
-    </button>
-
-    <button class="fab logout" (click)="logout()">
-      <i class="fa-solid fa-right-from-bracket"></i>
-    </button>
-  </div>
 </div>

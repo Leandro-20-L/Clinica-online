@@ -66,7 +66,7 @@ export class LoginComponent {
       return;
     }
 
-    // 🔹 Mensaje y redirección
+   
     this.snackBar.open(`Bienvenido ${usuario.nombre}`, 'Cerrar', {
       duration: 3000,
       panelClass: ['snackbar-success'],
@@ -80,7 +80,7 @@ export class LoginComponent {
         this.router.navigate(['/dashboard-especialista']);
         break;
       case 'paciente':
-        this.router.navigate(['/dashboard-paciente']);
+        this.router.navigate(['/paciente']);
         break;
     }
 
