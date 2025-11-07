@@ -46,7 +46,7 @@ export class SolicitarTurnoComponent {
 
   generarProximosDias() {
   const hoy = new Date();
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 15; i++) {
     const dia = new Date(hoy);
     dia.setDate(hoy.getDate() + i);
     
@@ -56,6 +56,26 @@ export class SolicitarTurnoComponent {
 
   seleccionarDia(dia: Date) {
   this.diaSeleccionado = dia;
+  // filtrar horarios 
+  const hoy = new Date();
+  const esHoy = dia.toDateString() === hoy.toDateString();
+
+  if (esHoy) {
+    const horaActual = hoy.getHours();
+    this.horariosDisponibles = [
+      '08:00', '09:00', '10:00', '11:00',
+      '13:00', '14:00', '15:00', '16:00'
+    ].filter(h => {
+      const [hora] = h.split(':').map(Number);
+      return hora > horaActual;
+    });
+  } else {
+    
+    this.horariosDisponibles = [
+      '08:00', '09:00', '10:00', '11:00',
+      '13:00', '14:00', '15:00', '16:00'
+    ];
+  }
 }
 
 seleccionarHora(hora: string) {

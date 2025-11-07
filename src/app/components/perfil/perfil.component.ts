@@ -29,8 +29,17 @@ export class PerfilComponent {
     this.rol = this.usuario?.rol || 'paciente';
   }
 
-
   volver() {
-  this.router.navigate(['/paciente']); 
+
+    if (this.rol == 'admin') {
+      this.router.navigate(['/admin']); 
+    }
+    else if(this.rol == 'especialista'){
+      this.router.navigate(['/especialista']);
+    }
+    else{
+      this.router.navigate(['/paciente']);
+    }
+   
 }
 }

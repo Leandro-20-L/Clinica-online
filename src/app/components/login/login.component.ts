@@ -6,6 +6,7 @@ import {MatSnackBar,MatSnackBarModule} from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 
+
 @Component({
   selector: 'app-login',
   imports: [CommonModule,ReactiveFormsModule, MatSnackBarModule],
@@ -66,6 +67,7 @@ export class LoginComponent {
       return;
     }
 
+
    
     this.snackBar.open(`Bienvenido ${usuario.nombre}`, 'Cerrar', {
       duration: 3000,
@@ -74,10 +76,10 @@ export class LoginComponent {
 
     switch (usuario.rol) {
       case 'admin':
-        this.router.navigate(['/usuarios']);
+        this.router.navigate(['/admin']);
         break;
       case 'especialista':
-        this.router.navigate(['/dashboard-especialista']);
+        this.router.navigate(['/especialista']);
         break;
       case 'paciente':
         this.router.navigate(['/paciente']);
@@ -102,4 +104,6 @@ export class LoginComponent {
    goToRegister() {
     this.router.navigate(['/register']);
   }
+
+  
 }

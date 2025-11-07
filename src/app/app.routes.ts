@@ -13,8 +13,15 @@ export const routes: Routes = [
         path: 'register', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
     },
     {
-        path: 'usuarios', loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+        path: 'admin', loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
     },
+    {
+        path: 'especialista', loadComponent: () => import('./components/dashboard-especialista/dashboard-especialista.component').then(m => m.DashboardEspecialistaComponent)
+    },
+    {
+        path: 'alta-admin', loadComponent: () => import('./components/nuevo-admin/nuevo-admin.component').then(m => m.NuevoAdminComponent)
+    },
+
     {
         path: 'paciente', loadComponent: () => import('./components/dashboard-paciente/dashboard-paciente.component').then(m => m.DashboardPacienteComponent),
         children: [
@@ -25,6 +32,7 @@ export const routes: Routes = [
             { path: 'turnos', component: MisTurnosComponent }
         ]
     },
+    { path: 'seccion-pacientes', loadComponent: () => import('./components/seccion-paciente/seccion-paciente.component').then(m => m.SeccionPacienteComponent) },
     {
         path: 'bienvenida', loadComponent: () => import('./components/bienvenida/bienvenida.component').then(m => m.BienvenidaComponent)
     },
@@ -34,10 +42,10 @@ export const routes: Routes = [
 
     {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'bienvenida',
         pathMatch: 'full'
     },
     { path: '**', 
-        redirectTo: 'login' 
+        redirectTo: 'bienvenida' 
     }
 ];

@@ -2,7 +2,7 @@
   <div class="register-card">
 
     
-    <h3 class="subtitle" *ngIf="!rolSeleccionado">Seleccione su tipo de usuario</h3>
+    <h3 class="subtitle" *ngIf="!rolSeleccionado"></h3>
 
 
     <div class="seleccion-rol" *ngIf="!rolSeleccionado">
@@ -27,6 +27,23 @@
       <div class="form-group" *ngFor="let campo of camposComunes">
         <label>{{ campo.label }}</label>
         <input [type]="campo.type" [formControlName]="campo.control" [placeholder]="campo.placeholder" />
+        <small
+      *ngIf="
+        registerForm.get(campo.control)?.hasError('required') &&
+        registerForm.get(campo.control)?.touched
+      "
+    >
+      Este campo es obligatorio
+    </small>
+     <small
+      *ngIf="
+        campo.control === 'edad' &&
+        registerForm.get('edad')?.hasError('min') &&
+        rolSeleccionado === 'especialista'
+      "
+    >
+      Debe tener al menos 18 años 
+    </small>
       </div>
       </div>
 
@@ -69,16 +86,20 @@
         </div>
       </ng-container>
 
-      <div class="form-group captcha-container">
+     <div class="form-group captcha-container">
         <re-captcha
             [siteKey]="siteKey"
             (resolved)="onCaptchaResolved($event)">
         </re-captcha>
-        </div>
+
+        <small *ngIf="!registerForm.get('recaptcha')?.value && registerForm.touched">
+            Debe completar el reCAPTCHA
+        </small>
+    </div>
 
 
       <div class="botones-form">
-        <button type="submit" [disabled]="registerForm.invalid" class="btn-register">
+        <button type="submit" [disabled]="!puedeRegistrarse()" class="btn-register">
           Registrarse
         </button>
         <button type="button" class="btn-volver" (click)="cancelarRol()">Volver</button>

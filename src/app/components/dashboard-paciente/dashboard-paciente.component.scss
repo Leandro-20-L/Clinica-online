@@ -5,7 +5,7 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* 🔹 Encabezado */
+
 .dashboard-header {
   background: linear-gradient(135deg, #007acc, #0099cc);
   color: white;
@@ -27,7 +27,7 @@
     }
   }
 
-  /* 🔹 Botón de perfil */
+  
   .perfil-btn {
     background: white;
     border: none;
@@ -54,7 +54,7 @@
   }
 }
 
-/* 🔹 Contenido principal */
+
 .contenido {
   margin-top: 2rem;
 
@@ -64,7 +64,7 @@
     font-weight: 600;
   }
 
-  /* 🔹 Cuadrícula de opciones */
+  
   .opciones-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

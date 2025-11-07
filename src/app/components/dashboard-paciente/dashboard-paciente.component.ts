@@ -28,27 +28,9 @@ export class DashboardPacienteComponent {
     this.turnos = [];
   }
 
-  //nose
-  abrirPerfil() {
-    Swal.fire({
-      title: 'Mi Perfil',
-      html: `
-        <strong>Nombre:</strong> ${this.paciente.nombre}<br>
-        <strong>Apellido:</strong> ${this.paciente.apellido}<br>
-        <strong>Correo:</strong> ${this.paciente.mail}<br>
-        <strong>Obra Social:</strong> ${this.paciente.obra_social || 'N/A'}
-      `,
-      confirmButtonText: 'Cerrar',
-    });
-  }
-
-  solicitarTurno() {
-    Swal.fire('Próximamente', 'Funcionalidad de solicitud de turnos.', 'info');
-  }
-
   async logout() {
     await this.authService.logOut();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/bienvenida']);
   }
 
   irA(seccion: string) {

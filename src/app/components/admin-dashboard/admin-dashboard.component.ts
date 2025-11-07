@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-dashboard.component.scss'
 })
 export class AdminDashboardComponent implements OnInit {
-   adminName: string = 'Admin';
+   adminName: string = '';
   usuarios: any[] = [];
   totalUsuarios = 0;
   totalPacientes = 0;
   totalEspecialistas = 0;
+  seccionActual: string = 'especialistas';
 
   constructor(
     private usuariosService: UsuariosService,
@@ -25,14 +26,20 @@ export class AdminDashboardComponent implements OnInit {
 
   async ngOnInit() {
     await this.cargarUsuarios();
+    
+    const uid = await this.authService.getUserUid();
+    const usuario = await this.usuariosService.obtenerPorUID(uid!);
+    this.adminName = usuario.nombre
   }
 
   async cargarUsuarios() {
-    const todos = await this.usuariosService.obtenerTodos();
-    this.totalUsuarios = this.usuarios.length;
-    this.totalPacientes = this.usuarios.filter(u => u.rol === 'paciente').length;
-    this.totalEspecialistas = this.usuarios.filter(u => u.rol === 'especialista').length;
+     const todos = await this.usuariosService.obtenerTodos();
+
     this.usuarios = todos.filter(u => u.rol === 'especialista');
+    this.totalUsuarios = todos.length;
+    this.totalPacientes = todos.filter(u => u.rol === 'paciente').length;
+    this.totalEspecialistas = this.usuarios.length;
+    
   }
 
   async habilitar(uid: string) {
@@ -51,6 +58,14 @@ export class AdminDashboardComponent implements OnInit {
 
   async logout() {
     await this.authService.logOut();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/bienvenida']);
+  }
+
+    verSeccion(nombre: string) {
+    this.seccionActual = nombre;
+  }
+
+  irA(seccion:string){
+    this.router.navigate([`/${seccion}`])
   }
 }

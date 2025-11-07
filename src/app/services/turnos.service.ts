@@ -6,8 +6,6 @@ import {supabase } from "../supabase.client";
 })
 export class TurnosService {
 
-  
-
   constructor() {}
 
   
@@ -70,6 +68,18 @@ async obtenerTurnosEspecialista(idEspecialista: number) {
   if (error) throw error;
   return data;
 }
+
+  async actualizarEstadoTurno(idTurno: number, nuevoEstado: string, comentario?: string) {
+    const updateData: any = { estado: nuevoEstado };
+    if (comentario) updateData.comentario_cancelacion = comentario;
+
+    const { error } = await supabase
+      .from('turno')
+      .update(updateData)
+      .eq('id_turno', idTurno);
+
+    if (error) throw error;
+  }
 
 }
 

@@ -22,7 +22,16 @@ export class MisTurnosComponent {
   async ngOnInit() {
     const uid = await this.authService.getUserUid();
     this.paciente = await this.authService.obtenerUsuarioPorUID(uid!);
-    this.turnos = await this.turnosService.obtenerTurnosPaciente(this.paciente.id);
+    const turnosDB = await this.turnosService.obtenerTurnosPaciente(this.paciente.id);
+
+  const ahora = new Date();
+
+  //  turnos aceptados o pendientes y que aún no pasaron
+  this.turnos = turnosDB.filter((t: any) => {
+    const turnoFechaHora = new Date(`${t.fecha}T${t.hora}`);
+    const estadoValido = t.estado === 'pendiente' || t.estado === 'aceptado' || t.estado === 'rechazado';
+    return estadoValido && turnoFechaHora > ahora;
+  });
   }
 
   async cancelarTurno(turno: any) {

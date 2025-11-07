@@ -15,7 +15,7 @@
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 80, 160, 0.15);
   padding: 2.5rem;
-  width: 380px;
+  width: 460px;
   text-align: center;
 }
 
@@ -115,9 +115,7 @@
 
       &:hover {
         background-color: #007acc;
-        img {
-          filter: brightness(0) invert(1);
-        }
+        
       }
     }
   }

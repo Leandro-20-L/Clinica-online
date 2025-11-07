@@ -1,42 +1,71 @@
 .dashboard-container {
   min-height: 100vh;
-  background-color: #f8fafc;
-  padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
+  background: #f9fafc;
+  padding: 1.5rem 2rem;
+  color: #1e293b;
 }
 
 .dashboard-header {
-  background: linear-gradient(135deg, #007acc, #00a8cc);
-  color: white;
-  padding: 1.5rem 2rem;
-  border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-
-  h1 {
-    font-weight: 700;
-    margin: 0;
-  }
+  background: #007acc;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
   .user-info {
     display: flex;
     align-items: center;
     gap: 1rem;
 
+     .admin-name {
+      font-weight: 500;
+    }
+
+    .btn-perfil {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(6px);
+
+      .icono-perfil {
+        width: 20px;
+        height: 20px;
+        filter: brightness(0) invert(1); 
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: scale(0.97);
+      }
+    }
+
+
     .btn-logout {
       background: white;
       color: #007acc;
       border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
       transition: 0.3s;
-
       &:hover {
-        background: #e0f2fe;
+        background: #e8f3ff;
       }
     }
   }
@@ -44,26 +73,23 @@
 
 .summary-cards {
   display: flex;
-  justify-content: space-around;
+  gap: 1.5rem;
   margin: 2rem 0;
 
   .card {
+    flex: 1;
     background: white;
-    border-radius: 10px;
-    width: 30%;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     text-align: center;
     padding: 1.5rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
     h3 {
       color: #007acc;
-      font-weight: 600;
       margin-bottom: 0.5rem;
     }
-
     p {
       font-size: 1.8rem;
-      font-weight: bold;
+      font-weight: 700;
       color: #1e293b;
     }
   }
@@ -73,31 +99,25 @@
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 
   .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
-
-    h2 {
-      color: #007acc;
-      margin: 0;
-    }
+    margin-bottom: 1rem;
 
     .btn-new-user {
       background: #007acc;
       color: white;
       border: none;
       padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      cursor: pointer;
+      border-radius: 6px;
       font-weight: 600;
+      cursor: pointer;
       transition: 0.3s;
-
       &:hover {
-        background: #005f99;
+        background: #005fa3;
       }
     }
   }
@@ -107,62 +127,125 @@
     border-collapse: collapse;
 
     th, td {
-      padding: 12px;
       text-align: left;
+      padding: 0.75rem;
       border-bottom: 1px solid #e2e8f0;
     }
 
     th {
       background: #f1f5f9;
-      color: #1e293b;
+      color: #334155;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 6px;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
       font-weight: 600;
+      transition: 0.3s;
+
+      &.btn-green {
+        background: #22c55e;
+        &:hover { background: #16a34a; }
+      }
+      &.btn-red {
+        background: #ef4444;
+        &:hover { background: #dc2626; }
+      }
     }
 
-    tr:hover {
-      background: #f8fafc;
+    .badge {
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
+      font-weight: 600;
+      &-true {
+        background: #dcfce7;
+        color: #166534;
+      }
+      &-false {
+        background: #fee2e2;
+        color: #991b1b;
+      }
     }
   }
 }
 
-.badge {
-  padding: 4px 10px;
+.menu-admin {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: white;
   border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 
-  &-true {
-    background: #22c55e;
-  }
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
 
-  &-false {
-    background: #ef4444;
-  }
-}
-
-.btn-action {
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-
-  &.btn-green {
-    background: #22c55e;
+    background: #007acc;
     color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
-    &:hover {
-      background: #16a34a;
+    i {
+      font-size: 1.1rem;
     }
-  }
-
-  &.btn-red {
-    background: #ef4444;
-    color: white;
 
     &:hover {
-      background: #dc2626;
+      background: #005fa3;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
   }
 }
+
+ .opcion {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 0.95rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+
+    img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+
+    &:hover {
+      background: #e0f2fe;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+  }

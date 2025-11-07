@@ -1,0 +1,74 @@
+.pacientes-container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem auto;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  color: #1e293b;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.pacientes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    color: #007acc;
+    font-weight: 600;
+  }
+
+  .btn-volver {
+    background: #007acc;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #005fa3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 122, 204, 0.25);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}
+
+.tabla-pacientes {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+
+  thead {
+    background: #007acc;
+    color: white;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.9rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  tbody tr:hover {
+    background: #f1f9ff;
+    transition: 0.2s;
+  }
+}
+
+.vacio {
+  text-align: center;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 1rem;
+}

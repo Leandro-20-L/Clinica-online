@@ -1,0 +1,30 @@
+<div class="pacientes-container">
+  <div class="pacientes-header">
+    <h2> Listado de Pacientes</h2>
+    <button class="btn-volver" (click)="volver()">← Volver al Panel</button>
+  </div>
+
+  <table class="tabla-pacientes" *ngIf="pacientes.length > 0; else noPacientes">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>DNI</th>
+        <th>Edad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of pacientes">
+        <td>{{ p.nombre }} {{ p.apellido }}</td>
+        <td>{{ p.mail }}</td>
+        <td>{{ p.dni }}</td>
+        <td>{{ p.edad }}</td>
+        
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noPacientes>
+    <p class="vacio">No hay pacientes registrados.</p>
+  </ng-template>
+</div>

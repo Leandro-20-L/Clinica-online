@@ -73,7 +73,7 @@ export class UsuariosService {
 
     const { data, error } = await supabase.storage
       .from('usuarios')
-      .upload(ruta, foto, { upsert: true }); //  sobrescribe si ya existe
+      .upload(ruta, foto, { upsert: true }); 
 
     if (error) throw error;
 
@@ -90,5 +90,15 @@ export class UsuariosService {
     console.error('Error al subir la imagen:', error.message);
     throw error;
   }
+}
+
+async obtenerPorRol(rol: string): Promise<any[]> {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('*')
+    .eq('rol', rol);
+
+  if (error) throw error;
+  return data || [];
 }
 }
