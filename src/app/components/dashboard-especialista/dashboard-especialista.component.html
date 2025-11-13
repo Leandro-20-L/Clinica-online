@@ -17,7 +17,7 @@
     </div>
   </header>
 
-  <!-- 🔍 BUSCADOR -->
+  <!-- BUSCADOR -->
   <input
     type="text"
     placeholder="Buscar por especialidad / paciente..."
@@ -26,7 +26,7 @@
     class="input-buscar"
   />
 
-  <!-- 🔘 FILTROS -->
+  <!-- FILTROS -->
   <section class="filtros">
     <button [class.activo]="filtro === 'pendiente'" (click)="cambiarFiltro('pendiente')">Pendientes</button>
     <button [class.activo]="filtro === 'aceptado'" (click)="cambiarFiltro('aceptado')">Aceptados</button>
@@ -45,19 +45,17 @@
         <p><strong>Hora:</strong> {{ turno.hora }}</p>
         <p class="estado" [ngClass]="turno.estado">{{ turno.estado | titlecase }}</p>
 
-        <!-- 🔸 Acciones según estado -->
+        
         <div class="acciones" *ngIf="turno.estado === 'pendiente'">
           <button class="btn-aceptar" (click)="aceptarTurno(turno)">Aceptar</button>
           <button class="btn-rechazar" (click)="rechazarTurno(turno)">Rechazar</button>
         </div>
 
         <div class="acciones" *ngIf="turno.estado === 'aceptado'">
-          <button class="btn-realizado" (click)="marcarRealizado(turno)">Marcar realizado</button>
+          <button class="btn-realizado" (click)="abrirHistoriaClinica(turno)">Finalizar turno</button>
         </div>
 
-        <div class="acciones" *ngIf="turno.estado === 'realizado' && turno.resena === null">
-          <button class="btn-resenia" (click)="abrirResenia(turno)">Cargar reseña</button>
-        </div>
+        
 
         <div *ngIf="turno.resena">
           <p><strong>Reseña cargada:</strong> {{ turno.resena }}</p>
@@ -73,14 +71,77 @@
 
   <!-- MODAL RESEÑA -->
   <div class="modal-overlay" *ngIf="modalAbierto">
-    <div class="modal">
-      <h3>{{ modalTitulo }}</h3>
+    
 
-      <textarea [(ngModel)]="textoResenia" placeholder="Escriba su reseña..."></textarea>
+     <div class="modal">
+  <h3>{{ modalTitulo }}</h3>
+  
 
-      <button class="btn-guardar" (click)="guardarResenia()">Guardar reseña</button>
+  <!-- Reseña -->
+  <textarea
+    [(ngModel)]="textoResenia"
+    placeholder="Escriba su reseña..."
+    class="input-textarea"
+  ></textarea>
 
-      <button class="btn-cerrar-modal" (click)="cerrarModal()">Cerrar</button>
-    </div>
+  <h4>Datos clínicos</h4>
+
+  <!-- Altura -->
+  <input
+    type="number"
+    [(ngModel)]="altura"
+    placeholder="Altura (cm)"
+    class="input-clinico"
+  />
+
+  <!-- Peso -->
+  <input
+    type="number"
+    [(ngModel)]="peso"
+    placeholder="Peso (kg)"
+    class="input-clinico"
+  />
+
+  <!-- Temperatura -->
+  <input
+    type="number"
+    [(ngModel)]="temperatura"
+    placeholder="Temperatura (°C)"
+    class="input-clinico"
+  />
+
+  <!-- Presión -->
+  <input
+    type="text"
+    [(ngModel)]="presion"
+    placeholder="Presión arterial"
+    class="input-clinico"
+  />
+
+  <h4>Datos opcionales</h4>
+
+  <!-- OPCIONAL 1 -->
+  <div class="fila-opcional">
+    <input type="text" [(ngModel)]="dato1.clave" placeholder="Clave 1" />
+    <input type="text" [(ngModel)]="dato1.valor" placeholder="Valor 1" />
   </div>
+
+  <!-- OPCIONAL 2 -->
+  <div class="fila-opcional">
+    <input type="text" [(ngModel)]="dato2.clave" placeholder="Clave 2" />
+    <input type="text" [(ngModel)]="dato2.valor" placeholder="Valor 2" />
+  </div>
+
+  <!-- OPCIONAL 3 -->
+  <div class="fila-opcional">
+    <input type="text" [(ngModel)]="dato3.clave" placeholder="Clave 3" />
+    <input type="text" [(ngModel)]="dato3.valor" placeholder="Valor 3" />
+  </div>
+
+  <button class="btn-guardar" (click)="guardarResenia()">Guardar reseña</button>
+  <button class="btn-cerrar-modal" (click)="cerrarModal()">Cerrar</button>
+</div>
+  </div>
+
+ 
 </div>

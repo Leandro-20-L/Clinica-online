@@ -56,7 +56,7 @@ export class SolicitarTurnoComponent {
   async seleccionarEspecialidad(esp: string) {
     this.especialidadSeleccionada = esp;
 
-    // Traer disponibilidad real del especialista
+    
     this.horariosDelEspecialista = await this.horariosService.obtenerPorEspecialista(this.especialistaSeleccionado.id);
 
     this.generarDiasDisponibles();
@@ -128,7 +128,7 @@ export class SolicitarTurnoComponent {
   generarDiasDisponibles() {
   this.diasDisponibles = [];
 
-  // Obtenemos los nombres de días que el especialista trabaja
+  
   const diasActivos = this.horariosDelEspecialista.map((h: any) => h.dia_semana.toLowerCase());
   const hoy = new Date();
 

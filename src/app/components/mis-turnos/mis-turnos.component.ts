@@ -33,8 +33,8 @@ calificacionEncuesta: number | null = null;
   async enviarEncuesta() {
 
   const datos = {
-    resena: this.comentarioEncuesta,
-    calificacion: this.calificacionEncuesta,
+    comentario_encuesta: this.comentarioEncuesta,
+  calificacion: this.calificacionEncuesta,
     completo_encuesta: true
   };
 

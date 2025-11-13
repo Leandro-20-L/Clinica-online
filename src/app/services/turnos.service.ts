@@ -64,8 +64,8 @@ async obtenerTurnosEspecialista(idEspecialista: number) {
   const { data, error } = await supabase
     .from('turno')
     .select(`
-      id_turno, fecha, hora, estado, especialidad,comentario_cancelacion,resena,
-      usuarios!turno_id_paciente_fkey(nombre, apellido, obra_social)
+      id_turno,id_especialista, fecha, hora, estado, especialidad,comentario_cancelacion,resena,
+      usuarios!turno_id_paciente_fkey(id,nombre, apellido, obra_social)
     `)
     .eq('id_especialista', idEspecialista)
     .order('fecha', { ascending: true });
@@ -91,6 +91,16 @@ async obtenerTurnosEspecialista(idEspecialista: number) {
     .from('turno')
     .update(campos)
     .eq('id_turno', id_turno);
+}
+
+async guardarHistoriaClinica(historia: any) {
+  const { data, error } = await supabase
+    .from('historia_clinica')
+    .insert(historia);
+
+  if (error) throw error;
+
+  return data;
 }
 
 }

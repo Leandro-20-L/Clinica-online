@@ -1,7 +1,7 @@
 <div class="solicitar-container">
   <h2>Solicitar turno</h2>
 
-  <!-- 1️⃣ Seleccionar profesional -->
+  <!--  Seleccionar profesional -->
   <div *ngIf="!especialistaSeleccionado">
     <h3>Seleccione un profesional</h3>
     <div class="grid">
@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <!-- 2️⃣ Seleccionar especialidad -->
+  <!--  Seleccionar especialidad -->
   <div *ngIf="especialistaSeleccionado && !especialidadSeleccionada">
     <h3>Especialidades de {{ especialistaSeleccionado.nombre }}</h3>
     <div class="grid-especialidades">
@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <!-- 3️⃣ Seleccionar día y horario -->
+  <!--  Seleccionar día y horario -->
   <div *ngIf="especialidadSeleccionada" class="seleccion-turno">
     <h3>Seleccione un día</h3>
     <div class="dias-grid">

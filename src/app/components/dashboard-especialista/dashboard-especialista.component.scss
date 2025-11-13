@@ -250,6 +250,30 @@
   cursor: pointer;
 }
 
+.input-clinico, .fila-opcional input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.fila-opcional {
+  display: flex;
+  gap: 10px;
+}
+
+.snack-error {
+  background: #d32f2f !important; 
+  color: white !important;
+}
+
+.snack-ok {
+  background: #388e3c !important; 
+  color: white !important;
+}
+
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
