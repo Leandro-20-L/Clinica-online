@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard-paciente',
-  imports: [CommonModule,RouterOutlet],
+  imports: [CommonModule],
   templateUrl: './dashboard-paciente.component.html',
   styleUrl: './dashboard-paciente.component.scss'
 })

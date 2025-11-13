@@ -9,12 +9,15 @@ export class UsuariosService {
   constructor() {}
 
  
-  async insertar(usuario: any): Promise<void> {
-    const { error } = await supabase
+  async insertar(usuario: any): Promise<any> {
+    const { data, error } = await supabase
       .from('usuarios')
-      .insert([usuario]);
+      .insert([usuario])
+      .select();
 
     if (error) throw error;
+
+    return { data, error }; 
   }
 
 
@@ -99,6 +102,28 @@ async obtenerPorRol(rol: string): Promise<any[]> {
     .eq('rol', rol);
 
   if (error) throw error;
+  return data || [];
+}
+
+
+async agregarEspecialidad(id_especialista: number, especialidad: string) {
+  const { error } = await supabase
+    .from('especialista_especialidad')
+    .insert([{ id_especialista, especialidad }]);
+  if (error) throw error;
+}
+
+async obtenerEspecialidades(idEspecialista: number) {
+  const { data, error } = await supabase
+    .from('especialista_especialidad')
+    .select('especialidad')
+    .eq('id_especialista', idEspecialista);
+
+  if (error) {
+    console.error('Error al obtener especialidades:', error);
+    return [];
+  }
+
   return data || [];
 }
 }

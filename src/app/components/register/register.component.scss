@@ -1,11 +1,3 @@
-body {
-  background-image: url('/fondo.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
 .register-container {
    min-height: 100vh;
   background-image: url('/fondo.png');
@@ -30,7 +22,6 @@ body {
 
 .title {
   color: #004080;
-  //margin-bottom: 0.5rem;
 }
 
 .subtitle {
@@ -38,7 +29,6 @@ body {
   margin-bottom: 1.5rem;
   font-weight: 500;
 }
-
 
 .seleccion-rol {
   display: flex;
@@ -103,9 +93,8 @@ body {
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr); 
-  gap: 1rem 1.2rem; 
-  column-gap: 1.2rem;
-  row-gap: 1.5rem; 
+ gap: 1.8rem 2.8rem; /* más espacio entre filas y columnas */
+  margin-bottom: 2rem; /* separación general con el resto del formulario */
   
 
   @media (max-width: 600px) {

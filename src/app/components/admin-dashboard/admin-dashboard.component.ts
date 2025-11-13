@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-dashboard.component.scss'
 })
 export class AdminDashboardComponent implements OnInit {
-   adminName: string = '';
   usuarios: any[] = [];
   totalUsuarios = 0;
   totalPacientes = 0;
@@ -26,10 +25,7 @@ export class AdminDashboardComponent implements OnInit {
 
   async ngOnInit() {
     await this.cargarUsuarios();
-    
-    const uid = await this.authService.getUserUid();
-    const usuario = await this.usuariosService.obtenerPorUID(uid!);
-    this.adminName = usuario.nombre
+  
   }
 
   async cargarUsuarios() {

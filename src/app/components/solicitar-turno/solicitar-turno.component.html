@@ -1,42 +1,44 @@
 <div class="solicitar-container">
   <h2>Solicitar turno</h2>
 
-  <!--  especialidad -->
-  <div *ngIf="!especialidadSeleccionada">
-    <h3>Seleccione una especialidad</h3>
-    <div class="grid">
-      <button *ngFor="let esp of especialidades" (click)="seleccionarEspecialidad(esp)">
-        {{ esp }}
-      </button>
-    </div>
-  </div>
-
-  <!--  especialista -->
-  <div *ngIf="especialidadSeleccionada && !especialistaSeleccionado">
-    <h3>Especialistas en {{ especialidadSeleccionada }}</h3>
+  <!-- 1️⃣ Seleccionar profesional -->
+  <div *ngIf="!especialistaSeleccionado">
+    <h3>Seleccione un profesional</h3>
     <div class="grid">
       <button *ngFor="let e of especialistas" (click)="seleccionarEspecialista(e)">
-        <img [src]="e.imagen1" alt="Foto">
+        <img [src]="e.imagen1 || 'assets/imgs/default-user.png'" alt="Foto del profesional" />
         <span>{{ e.nombre }} {{ e.apellido }}</span>
       </button>
     </div>
   </div>
 
-  <!-- fecha  (solo si hay especialista seleccionado) -->
-  <div *ngIf="especialistaSeleccionado" class="seleccion-turno">
+  <!-- 2️⃣ Seleccionar especialidad -->
+  <div *ngIf="especialistaSeleccionado && !especialidadSeleccionada">
+    <h3>Especialidades de {{ especialistaSeleccionado.nombre }}</h3>
+    <div class="grid-especialidades">
+      <button *ngFor="let esp of especialidadesDelProfesional" (click)="seleccionarEspecialidad(esp)">
+        <img [src]="especialistaSeleccionado.imagen1 || 'assets/imgs/default-especialidad.png'" alt="Especialidad" />
+        <span>{{ esp }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 3️⃣ Seleccionar día y horario -->
+  <div *ngIf="especialidadSeleccionada" class="seleccion-turno">
     <h3>Seleccione un día</h3>
     <div class="dias-grid">
-      <button *ngFor="let d of diasDisponibles" (click)="seleccionarDia(d)" 
+      <button *ngFor="let d of diasDisponibles"
+              (click)="seleccionarDia(d)"
               [class.activo]="d === diaSeleccionado">
-        {{ d | diaEs  }}
+        {{ d | diaEs }}
       </button>
     </div>
 
     <div *ngIf="diaSeleccionado">
       <h3>Seleccione un horario</h3>
       <div class="horas-grid">
-        <button *ngFor="let h of horariosDisponibles" 
-                (click)="seleccionarHora(h)" 
+        <button *ngFor="let h of horariosDisponibles"
+                (click)="seleccionarHora(h)"
                 [class.activo]="h === horaSeleccionada">
           {{ h }}
         </button>

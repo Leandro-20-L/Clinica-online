@@ -65,26 +65,33 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="rolSeleccionado === 'especialista'">
-        <div class="form-group">
-          <label>Especialidad</label>
-          <select formControlName="especialidad">
-            <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
-            <option value="otra">Otra...</option>
-          </select>
-        </div>
+     <ng-container *ngIf="rolSeleccionado === 'especialista'">
+  <!-- Select con especialidades existentes -->
+  <div class="form-group">
+    <label>Especialidades existentes</label>
+    <select formControlName="especialidades" >
+      <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
+    </select>
+    <small>Puedes seleccionar una o varias (Ctrl/Cmd para múltiple selección)</small>
+  </div>
 
-        <div class="form-group" *ngIf="registerForm.get('especialidad')?.value === 'otra'">
-          <label>Agregar nueva especialidad</label>
-          <input type="text" formControlName="nuevaEspecialidad" placeholder="Ingrese la nueva especialidad" />
-        </div>
+  <!-- Input opcional para nuevas especialidades separadas por comas -->
+  <div class="form-group">
+    <label>Agregar nuevas especialidades (opcional)</label>
+    <input
+      type="text"
+      formControlName="nuevasEspecialidades"
+      placeholder="Ej: Pediatría, Kinesiología"
+    />
+    <small>Separe varias con comas ( , )</small>
+  </div>
 
-        <div class="form-group">
-          <label>Imagen de perfil</label>
-          <input type="file" accept="image/*" (change)="onFileChange($event, 1)" />
-            <img *ngIf="imagenesPreview[0]" [src]="imagenesPreview[0]" class="preview-img" />
-        </div>
-      </ng-container>
+  <div class="form-group">
+    <label>Imagen de perfil</label>
+    <input type="file" accept="image/*" (change)="onFileChange($event, 1)" />
+    <img *ngIf="imagenesPreview[0]" [src]="imagenesPreview[0]" class="preview-img" />
+  </div>
+</ng-container>
 
      <div class="form-group captcha-container">
         <re-captcha

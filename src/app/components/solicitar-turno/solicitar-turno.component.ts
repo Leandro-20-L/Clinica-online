@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { DiaEsPipe } from '../../pipes/dia-es.pipe';
 import { TurnosService } from '../../services/turnos.service';
 import { AuthService } from '../../services/auth.service';
+import { HorariosService } from '../../services/horarios.service';
 
 @Component({
   selector: 'app-solicitar-turno',
@@ -16,78 +17,75 @@ import { AuthService } from '../../services/auth.service';
 export class SolicitarTurnoComponent {
   especialidades: string[] = [];
   especialistas: any[] = [];
+   especialidadesDelProfesional: string[] = [];
   paciente: any = null;
 
   especialidadSeleccionada: string | null = null;
   especialistaSeleccionado: any = null;
 
-  fechaSeleccionada: string | null = null;
-  horaSeleccionada: string | null = null;
   diasDisponibles: Date[] = [];
   diaSeleccionado: Date | null = null;
-  horariosDisponibles: string[] = [
-  '08:00', '09:00', '10:00', '11:00',
-  '13:00', '14:00', '15:00', '16:00'
-];
-  
+  horariosDisponibles: string[] = [];
+  horaSeleccionada: string | null = null;
 
-  constructor(private especialidadService: EspecialidadService,private turnosService: TurnosService, private authService: AuthService) {}
+  horariosDelEspecialista: any[] = []; 
+
+  constructor(
+    private especialidadService: EspecialidadService,
+    private turnosService: TurnosService,
+    private authService: AuthService,
+    private horariosService: HorariosService
+  ) {}
 
   async ngOnInit() {
-    this.especialidades = await this.especialidadService.obtenerEspecialidades();
-    this.generarProximosDias();
-     
-    //  paciente logueado
-     const uid = await this.authService.getUserUid();
-    this.paciente = await this.authService.obtenerUsuarioPorUID(uid!); 
+     this.especialistas = await this.especialidadService.obtenerTodosLosEspecialistas();
 
-    console.log('Paciente cargado:', this.paciente);
+    const uid = await this.authService.getUserUid();
+    this.paciente = await this.authService.obtenerUsuarioPorUID(uid!);
   }
 
   generarProximosDias() {
-  const hoy = new Date();
-  for (let i = 0; i < 15; i++) {
-    const dia = new Date(hoy);
-    dia.setDate(hoy.getDate() + i);
-    
-    if (dia.getDay() !== 0) this.diasDisponibles.push(dia);
+    const hoy = new Date();
+    for (let i = 0; i < 15; i++) {
+      const dia = new Date(hoy);
+      dia.setDate(hoy.getDate() + i);
+      if (dia.getDay() !== 0) this.diasDisponibles.push(dia); 
+    }
   }
-}
 
-  seleccionarDia(dia: Date) {
-  this.diaSeleccionado = dia;
-  // filtrar horarios 
-  const hoy = new Date();
-  const esHoy = dia.toDateString() === hoy.toDateString();
-
-  if (esHoy) {
-    const horaActual = hoy.getHours();
-    this.horariosDisponibles = [
-      '08:00', '09:00', '10:00', '11:00',
-      '13:00', '14:00', '15:00', '16:00'
-    ].filter(h => {
-      const [hora] = h.split(':').map(Number);
-      return hora > horaActual;
-    });
-  } else {
-    
-    this.horariosDisponibles = [
-      '08:00', '09:00', '10:00', '11:00',
-      '13:00', '14:00', '15:00', '16:00'
-    ];
-  }
-}
-
-seleccionarHora(hora: string) {
-  this.horaSeleccionada = hora;
-}
   async seleccionarEspecialidad(esp: string) {
     this.especialidadSeleccionada = esp;
-    this.especialistas = await this.especialidadService.obtenerEspecialistasPorEspecialidad(esp);
+
+    // Traer disponibilidad real del especialista
+    this.horariosDelEspecialista = await this.horariosService.obtenerPorEspecialista(this.especialistaSeleccionado.id);
+
+    this.generarDiasDisponibles();
+  
   }
 
-  seleccionarEspecialista(esp: any) {
+  async seleccionarEspecialista(esp: any) {
     this.especialistaSeleccionado = esp;
+
+    this.especialidadesDelProfesional = await this.especialidadService.obtenerEspecialidadesDeEspecialista(esp.id);
+
+    
+  }
+
+  seleccionarDia(dia: Date) {
+    this.diaSeleccionado = dia;
+    const nombreDia = this.obtenerNombreDia(dia); // lunes, martes, etc.
+
+    // Filtra horarios del especialista según el día seleccionado
+    const horariosDia = this.horariosDelEspecialista.filter(
+      (h: any) => h.dia_semana.toLowerCase() === nombreDia
+    );
+
+    // Transforma los resultados a una lista de horas visibles
+    this.horariosDisponibles = horariosDia.map((h: any) => h.hora_inicio);
+  }
+
+  seleccionarHora(hora: string) {
+    this.horaSeleccionada = hora;
   }
 
   async confirmarTurno() {
@@ -115,10 +113,34 @@ seleccionarHora(hora: string) {
     }
   }
 
+  obtenerNombreDia(fecha: Date): string {
+    const dias = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+    return dias[fecha.getDay()];
+  }
+
   resetFormulario() {
     this.especialidadSeleccionada = null;
     this.especialistaSeleccionado = null;
     this.diaSeleccionado = null;
     this.horaSeleccionada = null;
   }
+
+  generarDiasDisponibles() {
+  this.diasDisponibles = [];
+
+  // Obtenemos los nombres de días que el especialista trabaja
+  const diasActivos = this.horariosDelEspecialista.map((h: any) => h.dia_semana.toLowerCase());
+  const hoy = new Date();
+
+  
+  for (let i = 0; i < 15; i++) {
+    const dia = new Date(hoy);
+    dia.setDate(hoy.getDate() + i);
+
+    const nombreDia = this.obtenerNombreDia(dia).toLowerCase();
+    if (diasActivos.includes(nombreDia)) {
+      this.diasDisponibles.push(dia);
+    }
+  }
+}
 }

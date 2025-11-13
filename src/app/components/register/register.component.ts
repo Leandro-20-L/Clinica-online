@@ -50,8 +50,8 @@ export class RegisterComponent {
       mail: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       obraSocial: [''],
-      especialidad: [''],
-      nuevaEspecialidad: [''],
+      especialidades: [[]],
+       nuevasEspecialidades: [''],   
       recaptcha: ['', Validators.required]
     });
   }
@@ -96,36 +96,55 @@ export class RegisterComponent {
   }
 
   async onRegister() {
-    if (!this.puedeRegistrarse()) return; 
+     if (!this.puedeRegistrarse()) return;
 
     const data = { ...this.registerForm.value };
 
-    if (data.especialidad === 'otra' && data.nuevaEspecialidad) {
-      data.especialidad = data.nuevaEspecialidad.trim();
-      if (!this.especialidades.includes(data.especialidad)) {
-        this.especialidades.push(data.especialidad);
-      }
+    // normaliza especialidades seleccionadas
+    let especialidadesSeleccionadas: string[] = Array.isArray(data.especialidades)
+  ? [...data.especialidades]
+  : [];
+
+// --- Si escribió nuevas especialidades separadas por coma ---
+if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
+  const nuevas = data.nuevasEspecialidades
+    .split(',') // separa por coma
+    .map((e: string) => e.trim()) // quita espacios
+    .filter((e: string) => e !== ''); // evita vacíos
+
+  // agrega las nuevas evitando duplicados
+  for (const esp of nuevas) {
+    if (!especialidadesSeleccionadas.includes(esp)) {
+      especialidadesSeleccionadas.push(esp);
     }
 
+    // opcional: también agregarlas al listado local
+    if (!this.especialidades.includes(esp)) {
+      this.especialidades.push(esp);
+    }
+  }
+}
+
     try {
+      // 1) alta en auth
       const { data: authData, error } = await this.authService.signUp(data.mail, data.password);
       if (error) throw error;
 
       const uid = authData.user?.id;
       if (!uid) throw new Error('No se pudo obtener el UID del usuario.');
 
+      // 2) subir imágenes
       let imagen1: string | null = null;
       let imagen2: string | null = null;
 
       if (this.rolSeleccionado === 'paciente') {
         imagen1 = await this.usuariosService.subirFoto(`pacientes/${uid}-1.png`, this.imagenes[0]);
         imagen2 = await this.usuariosService.subirFoto(`pacientes/${uid}-2.png`, this.imagenes[1]);
-      }
-
-      if (this.rolSeleccionado === 'especialista') {
+      } else {
         imagen1 = await this.usuariosService.subirFoto(`especialistas/${uid}-perfil.png`, this.imagenes[0]);
       }
 
+      // 3) insertar usuario en tabla "usuarios"
       const nuevoUsuario = {
         uid,
         nombre: data.nombre,
@@ -134,16 +153,25 @@ export class RegisterComponent {
         dni: data.dni,
         mail: data.mail,
         rol: this.rolSeleccionado,
-        obra_social: this.rolSeleccionado === 'paciente' ? data.obraSocial || null : null,
-        especialidad: this.rolSeleccionado === 'especialista' ? data.especialidad : null,
+        obra_social: this.rolSeleccionado === 'paciente' ? (data.obraSocial || null) : null,
+        // ojo: ya NO guardamos "especialidad" en usuarios
         imagen1,
         imagen2,
         verificado: false,
-        habilitado: this.rolSeleccionado === 'paciente',
+        habilitado: this.rolSeleccionado === 'paciente'
       };
 
-      await this.usuariosService.insertar(nuevoUsuario);
+      const { data: insertRows } = await this.usuariosService.insertar(nuevoUsuario); // debe devolver .select()
+      const idUsuario = Array.isArray(insertRows) ? insertRows[0]?.id : (insertRows as any)?.id;
 
+      // 4) si es especialista, guardar relaciones en tabla intermedia
+      if (this.rolSeleccionado === 'especialista' && idUsuario) {
+        for (const esp of especialidadesSeleccionadas) {
+          await this.usuariosService.agregarEspecialidad(idUsuario, esp);
+        }
+      }
+
+      // 5) ok
       Swal.fire({
         icon: 'success',
         title: 'Registro exitoso',
@@ -151,13 +179,13 @@ export class RegisterComponent {
           this.rolSeleccionado === 'especialista'
             ? 'Su cuenta fue registrada. Espere la aprobación del administrador.'
             : 'Se ha enviado un correo de verificación a su email.',
-        confirmButtonText: 'Aceptar',
+        confirmButtonText: 'Aceptar'
       });
 
       this.router.navigate(['/login']);
-    } catch (error: any) {
-      console.error('Error en el registro:', error);
-      Swal.fire('Error', error.message || 'No se pudo registrar el usuario.', 'error');
+    } catch (err: any) {
+      console.error('Error en el registro:', err);
+      Swal.fire('Error', err.message || 'No se pudo registrar el usuario.', 'error');
     }
 }
 

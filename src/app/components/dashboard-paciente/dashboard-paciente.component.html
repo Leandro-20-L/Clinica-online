@@ -1,18 +1,15 @@
 <div class="dashboard-container">
-  
   <header class="dashboard-header">
     <div class="header-left">
       <h1>Bienvenido, {{ paciente?.nombre }}</h1>
       <p>Clínica Online - Portal del Paciente</p>
     </div>
 
-   
     <button class="perfil-btn" (click)="perfil()">
       <img src="usuarios/user.svg" alt="Perfil" />
     </button>
   </header>
 
- 
   <section class="contenido">
     <h2>Mis opciones</h2>
 
@@ -27,17 +24,10 @@
         <span>Mis Turnos</span>
       </button>
 
-      <button class="opcion" >
-        <img src="svgs/encuesta.svg" alt="Encuesta" />
-        <span>Encuesta</span>
-      </button>
-
       <button class="opcion" (click)="logout()">
         <img src="svgs/logout.svg" alt="Salir" />
         <span>Cerrar Sesión</span>
       </button>
     </div>
-
-    <router-outlet></router-outlet>
   </section>
 </div>

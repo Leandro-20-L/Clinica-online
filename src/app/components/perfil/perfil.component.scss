@@ -1,12 +1,21 @@
-.perfil-card {
-  max-width: 400px;
-  margin: 3rem auto;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 80, 160, 0.15);
-  text-align: center;
-  padding: 2rem 1.5rem;
+body {
+  margin: 0;
+  padding: 0;
+  background: url('/fondo.png');
+  background-size: cover;
   font-family: 'Poppins', sans-serif;
+}
+
+.perfil-card {
+  position: relative;
+  max-width: 400px;
+  margin: 5rem auto;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  text-align: center;
+  padding: 3rem 2rem 2rem;
   color: #1e293b;
 
   .perfil-img {
@@ -14,14 +23,15 @@
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
-    border: 4px solid #007acc;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 4px solid #00bcd4;
+    box-shadow: 0 0 12px rgba(0, 188, 212, 0.6);
     margin-bottom: 1rem;
   }
 
   h2 {
     color: #004080;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
   }
 
   p {
@@ -32,14 +42,13 @@
     }
   }
 
-  
   .rol-badge {
     display: inline-block;
-    padding: 0.3rem 0.8rem;
+    padding: 0.4rem 1rem;
     font-size: 0.8rem;
     font-weight: 600;
     border-radius: 12px;
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
     color: #fff;
   }
 
@@ -52,25 +61,151 @@
   .admin {
     background-color: #f97316;
   }
+
+  
+  .horarios-section {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+
+    .btn-horarios {
+      background: linear-gradient(90deg, #00bcd4, #4dd0e1);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.7rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 12px rgba(0, 188, 212, 0.4);
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 18px rgba(0, 188, 212, 0.8);
+        background: linear-gradient(90deg, #26c6da, #00acc1);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
 }
 
 .btn-cerrar {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  //background: #ef4444;
+  top: -25px;
+  left: 100%;
+  transform: translateX(-50%);
+  background: #ffffff;
   border: none;
-  //color: white;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: all 0.3s ease;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 28px;
+    height: 28px;
+    filter: invert(50%) sepia(100%) saturate(1000%) hue-rotate(180deg);
+    transition: transform 0.3s ease;
+  }
 
   &:hover {
-    background: #dc2626;
-    transform: scale(1.1);
+    background: #00bcd4;
+    img {
+      transform: rotate(90deg);
+      filter: brightness(100%) invert(1);
+    }
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 95%;
+  max-width: 1200px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+.tabla-horarios {
+  min-width: 900px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  text-align: center;
+
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 6px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  th {
+    background-color: #f3f4f6;
+  }
+
+  .dia-label {
+    text-transform: capitalize;
+    font-weight: bold;
+    background-color: #f9fafb;
+  }
+}
+
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 0.5rem;
+
+  .btn-guardar {
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+
+    &:hover {
+      background-color: #0097a7;
+    }
+  }
+
+  .btn-cancelar {
+    border: 1px solid #00bcd4;
+    color: #00bcd4;
+    background: transparent;
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+
+    &:hover {
+      background: #e0f7fa;
+    }
   }
 }

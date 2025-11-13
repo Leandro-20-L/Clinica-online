@@ -23,9 +23,12 @@
   </p>
 
   
-  <p *ngIf="rol === 'especialista'">
-    <strong>Especialidad:</strong> {{ usuario?.especialidad }}
-  </p>
+  <p *ngIf="rol === 'especialista' && especialidades.length > 0">
+  <strong>Especialidades:</strong> {{ especialidades.join(', ') }}
+</p>
+<p *ngIf="rol === 'especialista' && especialidades.length === 0">
+  <strong>Especialidades:</strong> No configuradas
+</p>
 
   
   <p *ngIf="rol === 'admin'">
@@ -33,6 +36,44 @@
   </p>
 
   <button class="btn-cerrar" (click)="volver()">
-  <img src="salir.svg" alt="">
+  <img src="svgs/salir.svg" alt="">
 </button>
+<div *ngIf="rol === 'especialista'" class="horarios-section">
+  <button class="btn-horarios" (click)="abrirModalHorarios()">
+    Configurar disponibilidad horaria
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="mostrarModal">
+  <div class="modal">
+    <h3>{{ usuario?.nombre }} {{ usuario?.apellido }}, disponibilidad horaria</h3>
+
+    <table class="tabla-horarios">
+      <thead>
+        <tr>
+          <th>Día</th>
+          <th *ngFor="let hora of horas">{{ hora }}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let dia of diasSemana">
+          <td class="dia-label">{{ dia }}</td>
+          <td *ngFor="let hora of horas">
+            <input
+              type="checkbox"
+              [(ngModel)]="disponibilidad[dia][hora]"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="modal-actions">
+      <button class="btn-guardar" (click)="guardarHorarios()">Guardar y salir</button>
+      <button class="btn-cancelar" (click)="cerrarModal()">Salir sin guardar</button>
+    </div>
+  </div>
+</div>
 </div>
