@@ -1,21 +1,99 @@
 <div class="turnos-container">
+
   <h2>Mis turnos</h2>
 
-  <div *ngIf="turnos.length; else noTurnos">
-    <div class="turno-card" *ngFor="let turno of turnos">
+  
+  <input 
+    type="text" 
+    placeholder="Buscar por especialidad..." 
+    [(ngModel)]="filtro" 
+    (input)="filtrarTurnos()" 
+    class="input-buscar"
+  />
+
+  <!-- LISTADO DE TURNOS -->
+  <div *ngIf="turnosFiltrados.length; else noTurnos">
+
+    <div class="turno-card" *ngFor="let turno of turnosFiltrados">
+
       <h3>{{ turno.especialidad }}</h3>
       <p><strong>Fecha:</strong> {{ turno.fecha }}</p>
       <p><strong>Hora:</strong> {{ turno.hora }}</p>
       <p><strong>Estado:</strong> {{ turno.estado }}</p>
       <p><strong>Especialista:</strong> {{ turno.usuarios?.nombre }} {{ turno.usuarios?.apellido }}</p>
 
-      <button *ngIf="turno.estado === 'pendiente'" (click)="cancelarTurno(turno)" class="btn-cancelar">
-        Cancelar
+      <!-- Estado pendiente -->
+      <button 
+        *ngIf="turno.estado === 'pendiente'" 
+        (click)="cancelarTurno(turno)" 
+        class="btn-cancelar"
+      >
+        Cancelar turno
+      </button>
+
+      <!-- Estado rechazado -->
+      <button 
+        *ngIf="turno.estado === 'rechazado'" 
+        (click)="verComentario(turno)" 
+        class="btn-rechazado"
+      >
+        Ver comentario
+      </button>
+
+      <!-- Estado realizado / finalizado -->
+      <div *ngIf="turno.estado === 'realizado'" class="acciones-finalizado">
+        <button class="btn-reseña" (click)="verResenia(turno)">Ver reseña</button>
+        <button class="btn-encuesta" (click)="resolverEncuesta(turno)">Responder encuesta</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!--  SIN TURNOS -->
+  <ng-template #noTurnos>
+    <p class="sin-turnos">No posee turnos cargados.</p>
+  </ng-template>
+
+  
+  <div class="modal-overlay" *ngIf="modalAbierto && modalAccion === 'encuesta'">
+    <div class="modal encuesta">
+
+      <h3>Encuesta del turno</h3>
+
+      <textarea 
+        [(ngModel)]="comentarioEncuesta"
+        placeholder="Deje su comentario">
+      </textarea>
+
+      <input 
+        type="number"
+        [(ngModel)]="calificacionEncuesta"
+        placeholder="Calificación (1 a 5)"
+        min="1" 
+        max="5"
+      />
+
+      <button class="btn-guardar" (click)="enviarEncuesta()">
+        Enviar encuesta
+      </button>
+
+      <button class="btn-cerrar-modal" (click)="cerrarModal()">
+        Cerrar
+      </button>
+
+    </div>
+  </div>
+
+  <!-- 🟦 MODAL GENERAL (comentario / reseña) -->
+  <div class="modal-overlay" *ngIf="modalAbierto && modalAccion === null">
+    <div class="modal">
+      <h3>{{ modalTitulo }}</h3>
+      <p>{{ modalContenido }}</p>
+
+      <button class="btn-cerrar-modal" (click)="cerrarModal()">
+        Cerrar
       </button>
     </div>
   </div>
 
-  <ng-template #noTurnos>
-    <p class="sin-turnos">No posee turnos cargados.</p>
-  </ng-template>
 </div>

@@ -1,213 +1,261 @@
 .especialista-container {
   max-width: 900px;
-  margin: 2rem auto;
-  padding: 1.5rem;
-  font-family: "Poppins", sans-serif;
-  color: #1a1a1a;
+  margin: 0 auto;
+  padding: 25px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(135deg, #0096c7, #00b4d8);
-  color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  margin-bottom: 2rem;
-
-  .info {
-    h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .especialidad {
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-  }
-
-   button {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-      img {
-        width: 20px;
-        height: 20px;
-      }
-    }
-
-    .btn-perfil {
-      background: white;
-      color: #007acc;
-      &:hover {
-        background: #eaf4ff;
-      }
-    }
-
-  .btn-logout {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #dc2626;
-    color: white;
-    border: 2px solid #ffffff50;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    margin-top: 10px;
-
-    img {
-      width: 20px;
-      height: 20px;
-    }
-
-    &:hover {
-      background: #ffffff40;
-      transform: scale(1.03);
-    }
-  }
+  margin-bottom: 25px;
 }
 
+.header .info h2 {
+  font-size: 27px;
+  font-weight: 600;
+  color: #1b3c59;
+}
+
+.acciones-header {
+  display: flex;
+  gap: 12px;
+}
+
+.acciones-header button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #e6eef5;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.acciones-header button:hover {
+  background: #d1e3f3;
+}
+
+.acciones-header img {
+  width: 20px;
+}
+
+/* ========== BUSCADOR ========== */
+.input-buscar {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #d1d7e0;
+  margin-bottom: 20px;
+  transition: .2s;
+}
+
+.input-buscar:focus {
+  border-color: #3a7bd5;
+  box-shadow: 0 0 5px rgba(58, 123, 213, 0.4);
+  outline: none;
+}
+
+/* ========== FILTROS ========== */
 .filtros {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 1.5rem;
-
-  button {
-    background: #e0f7fa;
-    border: 1px solid #00b4d8;
-    color: #0077b6;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #caf0f8;
-    }
-
-    &.activo {
-      background: #00b4d8;
-      color: white;
-    }
-  }
+  margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 
+.filtros button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #3a7bd5;
+  background: white;
+  cursor: pointer;
+  transition: .2s;
+  font-size: 14px;
+}
+
+.filtros button:hover {
+  background: #3a7bd5;
+  color: white;
+}
+
+.filtros .activo {
+  background: #3a7bd5;
+  color: white;
+}
+
+/* ========== TARJETAS DE TURNOS ========== */
 .turnos-lista {
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-  .turno-card {
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 1rem 1.2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.turno-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border-left: 6px solid #3a7bd5;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: 0.25s;
+}
 
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+.turno-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+}
 
-    h3 {
-      margin: 0 0 0.5rem 0;
-      color: #0077b6;
-      font-size: 1.2rem;
-    }
+.turno-card h3 {
+  margin: 0 0 8px;
+  color: #3a7bd5;
+  font-size: 20px;
+}
 
-    p {
-      margin: 0.25rem 0;
-      font-size: 0.95rem;
+.estado {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  text-transform: capitalize;
+  font-size: 14px;
+}
 
-      strong {
-        color: #333;
-      }
-    }
 
-    .estado {
-      margin-top: 0.5rem;
-      font-weight: 600;
-      text-transform: capitalize;
+.estado.pendiente {
+  background: #fff3cd;
+  color: #8a6d3b;
+}
+.estado.aceptado {
+  background: #d4edda;
+  color: #155724;
+}
+.estado.rechazado {
+  background: #f8d7da;
+  color: #721c24;
+}
+.estado.realizado {
+  background: #d1ecf1;
+  color: #0c5460;
+}
 
-      &.pendiente {
-        color: #ffb703;
-      }
 
-      &.aceptado {
-        color: #2a9d8f;
-      }
+.acciones {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
 
-      &.rechazado {
-        color: #d62828;
-      }
+.btn-aceptar,
+.btn-rechazar,
+.btn-realizado,
+.btn-resenia {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  font-size: 14px;
+  transition: 0.2s;
+}
 
-      &.realizado {
-        color: #457b9d;
-      }
-    }
 
-    .acciones {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.8rem;
+.btn-aceptar { background: #28a745; }
+.btn-rechazar { background: #dc3545; }
+.btn-realizado { background: #007bff; }
+.btn-resenia { background: #6f42c1; }
 
-      button {
-        flex: 1;
-        padding: 0.5rem;
-        border: none;
-        border-radius: 8px;
-        font-weight: 500;
-        cursor: pointer;
-        color: white;
-        transition: background 0.2s ease;
+.btn-aceptar:hover { background: #218838; }
+.btn-rechazar:hover { background: #c82333; }
+.btn-realizado:hover { background: #0069d9; }
+.btn-resenia:hover { background: #5a32a3; }
 
-        &.btn-aceptar {
-          background: #2a9d8f;
 
-          &:hover {
-            background: #21867a;
-          }
-        }
+.sin-turnos {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #777;
+}
 
-        &.btn-rechazar {
-          background: #d62828;
 
-          &:hover {
-            background: #b91d1d;
-          }
-        }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn .3s ease;
+}
 
-        &.btn-realizado {
-          background: #0077b6;
+.modal {
+  background: white;
+  width: 400px;
+  padding: 25px;
+  border-radius: 12px;
+  animation: slideUp .3s ease;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
 
-          &:hover {
-            background: #005f87;
-          }
-        }
-      }
-    }
-  }
+.modal h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #3a7bd5;
+}
 
-  .sin-turnos {
-    text-align: center;
-    color: #777;
-    font-style: italic;
-    margin-top: 2rem;
-  }
+.modal textarea {
+  width: 100%;
+  height: 120px;
+  padding: 10px;
+  resize: none;
+  border-radius: 8px;
+  border: 2px solid #d1d7e0;
+}
+
+.modal textarea:focus {
+  border-color: #3a7bd5;
+  outline: none;
+}
+
+.btn-guardar {
+  margin-top: 15px;
+  width: 100%;
+  background: #28a745;
+  border: none;
+  padding: 12px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn-guardar:hover {
+  background: #218838;
+}
+
+.btn-cerrar-modal {
+  margin-top: 10px;
+  width: 100%;
+  background: #dc3545;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); }
+  to { transform: translateY(0); }
 }
