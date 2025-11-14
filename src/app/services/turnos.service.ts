@@ -64,7 +64,7 @@ async obtenerTurnosEspecialista(idEspecialista: number) {
   const { data, error } = await supabase
     .from('turno')
     .select(`
-      id_turno,id_especialista, fecha, hora, estado, especialidad,comentario_cancelacion,resena,
+      id_turno,id_paciente,id_especialista, fecha, hora, estado, especialidad,comentario_cancelacion,resena,
       usuarios!turno_id_paciente_fkey(id,nombre, apellido, obra_social)
     `)
     .eq('id_especialista', idEspecialista)
@@ -99,6 +99,58 @@ async guardarHistoriaClinica(historia: any) {
     .insert(historia);
 
   if (error) throw error;
+
+  return data;
+}
+
+async obtenerPacientesDeEspecialista(idEspecialista: number) {
+  const { data, error } = await supabase
+    .from('turno')
+    .select(`
+      id_paciente,
+      usuarios:usuarios!turno_id_paciente_fkey(id, nombre, apellido, imagen1)
+    `)
+    .eq('id_especialista', idEspecialista)
+    .eq('estado', 'realizado');
+
+  if (error) throw error;
+
+  
+  const mapa = new Map();
+  data.forEach(t => mapa.set(t.id_paciente, t.usuarios));
+  return Array.from(mapa.values());
+}
+
+async obtenerHistoriasClinicasPaciente(idPaciente: number) {
+  const { data, error } = await supabase
+    .from('historia_clinica')
+    .select(`
+      *,
+      turno!inner(
+        fecha,
+        hora,
+        especialidad
+      )
+    `)
+    .eq('id_paciente', idPaciente)
+    .order('id_historia', { ascending: false });
+
+  if (error) throw error;
+
+  return data;
+}
+
+async obtenerPacientePorId(id: number) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error('Error al obtener paciente:', error);
+    return null;
+  }
 
   return data;
 }

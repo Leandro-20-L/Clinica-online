@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {MatSnackBar,MatSnackBarModule} from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
+import { LoadingService } from '../../services/loading.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class LoginComponent {
     private router: Router, 
     private snackBar: MatSnackBar, 
     private authService: AuthService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private loadingService : LoadingService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -35,6 +37,7 @@ export class LoginComponent {
 
   async onLogin() {
      if (!this.loginForm.valid) return;
+     this.loadingService.mostrarSpinner();
 
   const { email, password } = this.loginForm.value;
 
@@ -91,6 +94,8 @@ export class LoginComponent {
       duration: 3500,
       panelClass: ['snackbar-error'],
     });
+  }finally{
+    this.loadingService.ocultarSpinner();
   }
   }
 

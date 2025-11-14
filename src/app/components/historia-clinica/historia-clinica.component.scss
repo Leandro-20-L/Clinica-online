@@ -1,0 +1,90 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 2rem;
+  overflow-y: auto;
+  z-index: 9999;
+}
+
+.modal-historia {
+  background: #ffffff;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  position: relative;
+  animation: fadeIn 0.25s ease-out;
+
+  h2 {
+    text-align: center;
+    color: #1976d2;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.btn-cerrar {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  transition: 0.2s ease;
+
+  &:hover {
+    color: #d32f2f;
+  }
+}
+
+.historia-card {
+  background: #f5faff;
+  border: 1px solid #cfe2ff;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    color: #0d47a1;
+    margin-bottom: 0.2rem;
+  }
+
+  .fecha {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+  }
+
+  .clinicos {
+    margin-top: 0.8rem;
+
+    p {
+      margin: 2px 0;
+    }
+  }
+
+  .opcionales {
+    margin-top: 1rem;
+
+    h4 {
+      margin-bottom: 0.3rem;
+      color: #1565c0;
+    }
+
+    .fila {
+      margin: 3px 0;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

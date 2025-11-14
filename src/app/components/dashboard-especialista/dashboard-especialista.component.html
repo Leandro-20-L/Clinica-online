@@ -14,8 +14,31 @@
         <img src="svgs/logout.svg" alt="Cerrar sesión" />
         <span>Cerrar sesión</span>
       </button>
+
+       <button class="btn-historia-general" (click)="mostrarPacientesAtendidos()">
+  Ver historias clínicas
+</button>
     </div>
+   
   </header>
+
+    <!-- LISTA DE PACIENTES ATENDIDOS -->
+<div class="overlay" *ngIf="listaPacientesVisible">
+  <div class="modal-pacientes">
+    <h2>Pacientes atendidos</h2>
+
+    <div class="paciente-card" *ngFor="let p of pacientesAtendidos"
+         (click)="verHistorias(p)">
+      <img [src]="p.imagen1 || 'assets/imgs/default-user.png'" />
+      <div>
+        <p class="nombre">{{ p.nombre }} {{ p.apellido }}</p>
+        <p class="dni">DNI: {{ p.dni }}</p>
+      </div>
+    </div>
+
+    <button class="btn-cerrar" (click)="cerrarListaPacientes()">Cerrar</button>
+  </div>
+</div>
 
   <!-- BUSCADOR -->
   <input
@@ -33,6 +56,8 @@
     <button [class.activo]="filtro === 'rechazado'" (click)="cambiarFiltro('rechazado')">Rechazados</button>
     <button [class.activo]="filtro === 'realizado'" (click)="cambiarFiltro('realizado')">Realizados</button>
   </section>
+
+  
 
   <!-- LISTA DE TURNOS -->
   <section class="turnos-lista">
@@ -143,5 +168,11 @@
 </div>
   </div>
 
- 
+
+ <app-historia-clinica
+  *ngIf="viendoPaciente"
+  [paciente]="viendoPaciente"
+  [historias]="historiasPaciente"
+  [cerrar]="cerrarHistorias.bind(this)">
+</app-historia-clinica>
 </div>

@@ -121,7 +121,7 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
       especialidadesSeleccionadas.push(esp);
     }
 
-    // opcional: también agregarlas al listado local
+    
     if (!this.especialidades.includes(esp)) {
       this.especialidades.push(esp);
     }
@@ -129,14 +129,34 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
 }
 
     try {
-      // 1) alta en auth
+     
       const { data: authData, error } = await this.authService.signUp(data.mail, data.password);
+
+      if (error) {
+
+    if (
+      error.message.includes("already registered") || 
+      error.message.includes("User already registered") ||
+      error.message.toLowerCase().includes("email")
+    ) {
+      this.loadingService.ocultarSpinner();
+      Swal.fire({
+        icon: 'error',
+        title: 'Email ya registrado',
+        text: 'El correo ingresado ya existe en el sistema.',
+        confirmButtonText: 'Aceptar'
+      });
+      return;
+    }
+
+    throw error;
+  }
       if (error) throw error;
 
       const uid = authData.user?.id;
       if (!uid) throw new Error('No se pudo obtener el UID del usuario.');
 
-      // 2) subir imágenes
+      
       let imagen1: string | null = null;
       let imagen2: string | null = null;
 
@@ -147,7 +167,7 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
         imagen1 = await this.usuariosService.subirFoto(`especialistas/${uid}-perfil.png`, this.imagenes[0]);
       }
 
-      // 3) insertar usuario en tabla "usuarios"
+      //  insertar usuario en tabla "usuarios"
       const nuevoUsuario = {
         uid,
         nombre: data.nombre,
@@ -157,24 +177,24 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
         mail: data.mail,
         rol: this.rolSeleccionado,
         obra_social: this.rolSeleccionado === 'paciente' ? (data.obraSocial || null) : null,
-        // ojo: ya NO guardamos "especialidad" en usuarios
+        
         imagen1,
         imagen2,
         verificado: false,
         habilitado: this.rolSeleccionado === 'paciente'
       };
 
-      const { data: insertRows } = await this.usuariosService.insertar(nuevoUsuario); // debe devolver .select()
+      const { data: insertRows } = await this.usuariosService.insertar(nuevoUsuario); // tiene que taer .select()
       const idUsuario = Array.isArray(insertRows) ? insertRows[0]?.id : (insertRows as any)?.id;
 
-      // 4) si es especialista, guardar relaciones en tabla intermedia
+      
       if (this.rolSeleccionado === 'especialista' && idUsuario) {
         for (const esp of especialidadesSeleccionadas) {
           await this.usuariosService.agregarEspecialidad(idUsuario, esp);
         }
       }
 
-      // 5) ok
+      
       Swal.fire({
         icon: 'success',
         title: 'Registro exitoso',
@@ -187,8 +207,23 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
 
       this.router.navigate(['/login']);
     } catch (err: any) {
+       this.loadingService.ocultarSpinner();
+
+  
+  if (err.message && err.message.includes("usuarios_mail_key")) {
+    Swal.fire({
+      icon: "error",
+      title: "Email ya registrado",
+      text: "El correo ingresado ya existe",
+      confirmButtonText: "Aceptar"
+    });
+    return;
+  }
       console.error('Error en el registro:', err);
       Swal.fire('Error', err.message || 'No se pudo registrar el usuario.', 'error');
+
+      this.loadingService.ocultarSpinner();
+
     }finally {
    
     this.loadingService.ocultarSpinner();

@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {MatSnackBar,MatSnackBarModule} from '@angular/material/snack-bar';
+import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 
 @Component({
   selector: 'app-dashboard-especialista',
-  imports: [CommonModule,FormsModule,MatSnackBarModule],
+  imports: [CommonModule,FormsModule,MatSnackBarModule,HistoriaClinicaComponent],
   templateUrl: './dashboard-especialista.component.html',
   styleUrl: './dashboard-especialista.component.scss'
 })
@@ -27,11 +28,16 @@ export class DashboardEspecialistaComponent {
   turnoActual: any = null;
   textoResenia = '';
 
+  listaPacientesVisible = false;
+pacientesAtendidos: any[] = [];
+
   //Historia Clinica
   altura: number | null = null;
 peso: number | null = null;
 temperatura: number | null = null;
 presion: string = '';
+viendoPaciente = null;
+historiasPaciente :  any[] = [];
 
 dato1: any = { clave: '', valor: '' };
 dato2: any = { clave: '', valor: '' };
@@ -67,6 +73,35 @@ dato3: any = { clave: '', valor: '' };
 
     await this.cargarTurnos();
   }
+
+  async mostrarPacientesAtendidos() {
+  const turnosRealizados = this.turnos.filter(t => t.estado === 'realizado');
+
+  const idsUnicos = Array.from(new Set(turnosRealizados.map(t => t.id_paciente)));
+
+  this.pacientesAtendidos = [];
+
+  for (const id of idsUnicos) {
+    const paciente = await this.turnosService.obtenerPacientePorId(id);
+    if (paciente) this.pacientesAtendidos.push(paciente);
+  }
+
+  this.listaPacientesVisible = true;
+}
+
+cerrarListaPacientes() {
+  this.listaPacientesVisible = false;
+}
+
+
+  async verHistorias(p: any) {
+  this.viendoPaciente = p;
+  this.historiasPaciente = await this.turnosService.obtenerHistoriasClinicasPaciente(p.id);
+}
+
+cerrarHistorias() {
+  this.viendoPaciente = null;
+}
 
   async cargarTurnos() {
     this.turnos = await this.turnosService.obtenerTurnosEspecialista(this.especialista.id);
@@ -150,7 +185,7 @@ dato3: any = { clave: '', valor: '' };
     dato_opcional_3: this.dato3
   });
   console.log(this.turnoActual.usuarios.id);
-  // 3) Cambiar estado a realizado
+  
   await this.turnosService.actualizarEstadoTurno(this.turnoActual.id_turno, 'realizado');
 
   Swal.fire('Turno finalizado', 'La historia clínica fue registrada.', 'success');

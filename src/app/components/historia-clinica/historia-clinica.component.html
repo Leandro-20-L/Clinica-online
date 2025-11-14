@@ -1,1 +1,40 @@
-<p>historia-clinica works!</p>
+<div class="overlay" *ngIf="historias.length">
+  <div class="modal-historia">
+
+    <button class="btn-cerrar" (click)="cerrar()">
+      ✖
+    </button>
+
+    <h2>Historia clínica de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+
+    <div class="historia-card" *ngFor="let h of historias">
+      <h3>{{ h.especialidad }}</h3>
+      <p class="fecha">{{ h.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</p>
+
+      <div class="dato">
+        <strong>Reseña:</strong> {{ h.resena }}
+      </div>
+
+      <div class="clinicos">
+        <p><strong>Altura:</strong> {{ h.altura }} cm</p>
+        <p><strong>Peso:</strong> {{ h.peso }} kg</p>
+        <p><strong>Temperatura:</strong> {{ h.temperatura }} °C</p>
+        <p><strong>Presión:</strong> {{ h.presion }}</p>
+      </div>
+
+      <div class="opcionales" *ngIf="h.dato_opcional_1?.clave">
+        <h4>Datos adicionales</h4>
+
+        <div class="fila" *ngIf="h.dato_opcional_1?.clave">
+          <strong>{{ h.dato_opcional_1.clave }}:</strong> {{ h.dato_opcional_1.valor }}
+        </div>
+        <div class="fila" *ngIf="h.dato_opcional_2?.clave">
+          <strong>{{ h.dato_opcional_2.clave }}:</strong> {{ h.dato_opcional_2.valor }}
+        </div>
+        <div class="fila" *ngIf="h.dato_opcional_3?.clave">
+          <strong>{{ h.dato_opcional_3.clave }}:</strong> {{ h.dato_opcional_3.valor }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

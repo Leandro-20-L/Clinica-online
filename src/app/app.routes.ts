@@ -13,6 +13,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)
   },
   {
+    path: 'historia-clinica',
+    loadComponent: () => import('./components/historia-clinica/historia-clinica.component').then(m => m.HistoriaClinicaComponent)
+  },
+  {
     path: 'seccion-paciente',
     loadComponent: () => import('./components/seccion-paciente/seccion-paciente.component').then(m => m.SeccionPacienteComponent)
   },
@@ -20,7 +24,7 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
     children: [
-      // acá podrías agregar la nueva ruta del admin para sacar turnos a pacientes
+      
       { path: 'solicitar/:idPaciente', component: SolicitarTurnoComponent }
     ]
   },
