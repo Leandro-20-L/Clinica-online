@@ -128,51 +128,67 @@ body {
 }
 
 .modal-overlay {
-  position: fixed;
+   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(240, 240, 240, 0.95); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 3000;
+  overflow: hidden;
 }
 
 .modal {
   background: #ffffff;
-  border-radius: 12px;
-  padding: 2rem;
-  width: 95%;
-  max-width: 1200px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  position: relative;
 }
 
+
+.modal h2, .modal h3 {
+  margin-top: 0;
+  text-align: center;
+  color: #004080;
+}
+
+
+.tabla-horarios-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 1.2rem;
+}
 
 .tabla-horarios {
-  min-width: 900px;
+  width: max-content; 
+  margin: 0 auto;
   border-collapse: collapse;
-  margin-top: 1rem;
-  text-align: center;
-
-  th,
-  td {
-    border: 1px solid #ddd;
-    padding: 6px;
-    font-size: 0.85rem;
-    white-space: nowrap;
-  }
-
-  th {
-    background-color: #f3f4f6;
-  }
-
-  .dia-label {
-    text-transform: capitalize;
-    font-weight: bold;
-    background-color: #f9fafb;
-  }
 }
+
+.tabla-horarios th,
+.tabla-horarios td {
+  border: 1px solid #cfd8dc;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.tabla-horarios th {
+  background: #e7f3ff;
+  font-weight: 600;
+}
+
 
 
 .modal-actions {
@@ -180,32 +196,34 @@ body {
   justify-content: flex-end;
   margin-top: 1rem;
   gap: 0.5rem;
+}
 
-  .btn-guardar {
-    background-color: #00bcd4;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0.6rem 1.2rem;
-    cursor: pointer;
-    font-weight: 600;
+  .modal-actions .btn-guardar {
+  background-color: #00bcd4;
+  color: white;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
 
-    &:hover {
-      background-color: #0097a7;
-    }
+  &:hover {
+    background-color: #0097a7;
   }
+}
 
-  .btn-cancelar {
-    border: 1px solid #00bcd4;
-    color: #00bcd4;
-    background: transparent;
-    border-radius: 6px;
-    padding: 0.6rem 1.2rem;
-    cursor: pointer;
-    font-weight: 600;
+  .modal-actions .btn-cancelar {
+  background: transparent;
+  border: 2px solid #00bcd4;
+  color: #00bcd4;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
 
-    &:hover {
-      background: #e0f7fa;
-    }
+  &:hover {
+    background: #e0f7fa;
   }
 }

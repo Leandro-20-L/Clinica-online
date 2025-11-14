@@ -49,7 +49,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   abrirModalNuevoUsuario() {
-    alert('Funcionalidad para crear nuevo usuario (Sprint 2)');
+    console.log('Funcionalidad para crear nuevo usuario (Sprint 2)');
   }
 
   async logout() {

@@ -45,10 +45,14 @@
 </div>
 
 <!-- Modal -->
+
+</div>
+
 <div class="modal-overlay" *ngIf="mostrarModal">
   <div class="modal">
     <h3>{{ usuario?.nombre }} {{ usuario?.apellido }}, disponibilidad horaria</h3>
 
+    <div class="tabla-horarios-wrapper">
     <table class="tabla-horarios">
       <thead>
         <tr>
@@ -69,11 +73,11 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="modal-actions">
       <button class="btn-guardar" (click)="guardarHorarios()">Guardar y salir</button>
       <button class="btn-cancelar" (click)="cerrarModal()">Salir sin guardar</button>
     </div>
   </div>
-</div>
 </div>

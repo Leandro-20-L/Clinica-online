@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HorariosService } from '../../services/horarios.service';
 import { FormsModule } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-perfil',
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,MatSnackBarModule],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
 })
@@ -19,7 +20,7 @@ export class PerfilComponent {
 
   mostrarModal = false;
 
-  diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  diasSemana = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
   horas = [
     '08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30',
     '12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30',
@@ -32,7 +33,8 @@ export class PerfilComponent {
     private auth: AuthService, 
     private usuariosService: UsuariosService,
     private router: Router,
-    private horariosService: HorariosService) {}
+    private horariosService: HorariosService,
+  private snackBar: MatSnackBar) {}
 
   async ngOnInit() {
     if (!this.usuario) {
@@ -50,14 +52,24 @@ export class PerfilComponent {
 
     // Cargar horarios guardados del especialista
     if (this.rol === 'especialista') {
-      const horarios = await this.horariosService.obtenerPorEspecialista(this.usuario.id);
-      horarios.forEach((h: any) => {
-        const dia = h.dia_semana.charAt(0).toUpperCase() + h.dia_semana.slice(1).toLowerCase();
-        if (this.disponibilidad[dia]) {
-          this.disponibilidad[dia][h.hora_inicio] = true;
-        }
-      });
+  const horarios = await this.horariosService.obtenerPorEspecialista(this.usuario.id);
+
+  const diaBDtoUI: any = {
+    lunes: "Lunes",
+    martes: "Martes",
+    miercoles: "Miercoles",
+    jueves: "Jueves",
+    viernes: "Viernes",
+    sabado: "Sabado"
+  };
+
+  horarios.forEach((h: any) => {
+    const diaUI = diaBDtoUI[h.dia_semana.toLowerCase()];
+    if (diaUI && this.disponibilidad[diaUI]) {
+      this.disponibilidad[diaUI][h.hora_inicio] = true;
     }
+  });
+}
 
     if (this.rol === 'especialista' && this.usuario?.id) {
       const data = await this.usuariosService.obtenerEspecialidades(this.usuario.id);
@@ -81,7 +93,7 @@ export class PerfilComponent {
         if (this.disponibilidad[dia][hora]) {
           seleccionados.push({
             id_especialista: this.usuario.id,
-            dia_semana: dia,
+            dia_semana: dia.toLowerCase(),
             hora_inicio: hora
           });
         }
@@ -90,7 +102,10 @@ export class PerfilComponent {
 
     await this.horariosService.guardarDisponibilidad(this.usuario.id, seleccionados);
     this.mostrarModal = false;
-    alert('Disponibilidad guardada correctamente');
+    this.snackBar.open('horarios cargados.', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snackbar-error'],
+      });
   }
 
 

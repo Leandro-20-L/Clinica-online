@@ -66,7 +66,7 @@
       </ng-container>
 
      <ng-container *ngIf="rolSeleccionado === 'especialista'">
-  <!-- Select con especialidades existentes -->
+  <!-- Select con especialidades existentes 
   <div class="form-group">
     <label>Especialidades existentes</label>
     <select formControlName="especialidades" >
@@ -75,15 +75,17 @@
     <small>Puedes seleccionar una o varias (Ctrl/Cmd para múltiple selección)</small>
   </div>
 
+  -->
+
   <!-- Input opcional para nuevas especialidades separadas por comas -->
   <div class="form-group">
-    <label>Agregar nuevas especialidades (opcional)</label>
+    <label>Agregar especialidad/es</label>
     <input
       type="text"
       formControlName="nuevasEspecialidades"
       placeholder="Ej: Pediatría, Kinesiología"
     />
-    <small>Separe varias con comas ( , )</small>
+    <small class="small-especialidad">Separe varias con comas ( , )</small>
   </div>
 
   <div class="form-group">

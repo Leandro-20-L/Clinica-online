@@ -80,7 +80,6 @@ export class SolicitarTurnoComponent {
       (h: any) => h.dia_semana.toLowerCase() === nombreDia
     );
 
-    // Transforma los resultados a una lista de horas visibles
     this.horariosDisponibles = horariosDia.map((h: any) => h.hora_inicio);
   }
 
@@ -114,7 +113,7 @@ export class SolicitarTurnoComponent {
   }
 
   obtenerNombreDia(fecha: Date): string {
-    const dias = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+    const dias = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
     return dias[fecha.getDay()];
   }
 

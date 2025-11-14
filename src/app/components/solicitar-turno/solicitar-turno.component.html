@@ -17,7 +17,7 @@
     <h3>Especialidades de {{ especialistaSeleccionado.nombre }}</h3>
     <div class="grid-especialidades">
       <button *ngFor="let esp of especialidadesDelProfesional" (click)="seleccionarEspecialidad(esp)">
-        <img [src]="especialistaSeleccionado.imagen1 || 'assets/imgs/default-especialidad.png'" alt="Especialidad" />
+        <img [src]=" 'usuarios/default.png'" alt="Especialidad" />
         <span>{{ esp }}</span>
       </button>
     </div>

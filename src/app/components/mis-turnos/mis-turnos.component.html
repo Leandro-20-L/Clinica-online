@@ -43,7 +43,13 @@
       <!-- Estado realizado / finalizado -->
       <div *ngIf="turno.estado === 'realizado'" class="acciones-finalizado">
         <button class="btn-reseña" (click)="verResenia(turno)">Ver reseña</button>
-        <button class="btn-encuesta" (click)="resolverEncuesta(turno)">Responder encuesta</button>
+        <button class="btn-encuesta" *ngIf="!turno.completo_encuesta" (click)="resolverEncuesta(turno)">
+                  Responder encuesta
+                </button>
+
+                <p *ngIf="turno.completo_encuesta" class="encuesta-completada">
+                  Encuesta completada 
+                </p>
       </div>
 
     </div>

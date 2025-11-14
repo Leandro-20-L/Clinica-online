@@ -7,6 +7,7 @@ import { UsuariosService } from '../../services/usuarios.service';
 import Swal from 'sweetalert2';
 import {  RecaptchaModule } from 'ng-recaptcha';
 import { environment } from '../../../environments/environments';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-register',
@@ -37,7 +38,8 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private router: Router,
     private authService : AuthService,
-    private usuariosService : UsuariosService) {
+    private usuariosService : UsuariosService,
+  private loadingService: LoadingService) {
     this.initForm();
   }
 
@@ -97,6 +99,7 @@ export class RegisterComponent {
 
   async onRegister() {
      if (!this.puedeRegistrarse()) return;
+     this.loadingService.mostrarSpinner();
 
     const data = { ...this.registerForm.value };
 
@@ -177,7 +180,7 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
         title: 'Registro exitoso',
         text:
           this.rolSeleccionado === 'especialista'
-            ? 'Su cuenta fue registrada. Espere la aprobación del administrador.'
+            ? 'Se ha enviado un correo de verificación a su email.'
             : 'Se ha enviado un correo de verificación a su email.',
         confirmButtonText: 'Aceptar'
       });
@@ -186,7 +189,10 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
     } catch (err: any) {
       console.error('Error en el registro:', err);
       Swal.fire('Error', err.message || 'No se pudo registrar el usuario.', 'error');
-    }
+    }finally {
+   
+    this.loadingService.ocultarSpinner();
+  }
 }
 
   goToLogin() {
