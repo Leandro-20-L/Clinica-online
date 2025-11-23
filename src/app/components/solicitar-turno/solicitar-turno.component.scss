@@ -168,3 +168,10 @@
     }
   }
 }
+
+.horas-grid button.ocupado {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border-color: #d1d5db;
+}

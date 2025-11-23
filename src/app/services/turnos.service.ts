@@ -140,6 +140,15 @@ async obtenerHistoriasClinicasPaciente(idPaciente: number) {
   return data;
 }
 
+async obtenerTurnosPorEspecialistaYFecha(id: number, fecha: string) {
+  return supabase
+    .from('turno')
+    .select('*')
+    .eq('id_especialista', id)
+    .eq('fecha', fecha)
+    .eq('estado', 'pendiente');
+}
+
 async obtenerPacientePorId(id: number) {
   const { data, error } = await supabase
     .from('usuarios')

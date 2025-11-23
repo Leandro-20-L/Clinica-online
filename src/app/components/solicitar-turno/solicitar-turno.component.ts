@@ -29,6 +29,7 @@ export class SolicitarTurnoComponent {
   horaSeleccionada: string | null = null;
 
   horariosDelEspecialista: any[] = []; 
+  horasOcupadas: string[] = [];
 
   constructor(
     private especialidadService: EspecialidadService,
@@ -55,33 +56,39 @@ export class SolicitarTurnoComponent {
 
   async seleccionarEspecialidad(esp: string) {
     this.especialidadSeleccionada = esp;
-
     
     this.horariosDelEspecialista = await this.horariosService.obtenerPorEspecialista(this.especialistaSeleccionado.id);
 
     this.generarDiasDisponibles();
-  
   }
 
   async seleccionarEspecialista(esp: any) {
     this.especialistaSeleccionado = esp;
-
     this.especialidadesDelProfesional = await this.especialidadService.obtenerEspecialidadesDeEspecialista(esp.id);
-
-    
   }
 
-  seleccionarDia(dia: Date) {
-    this.diaSeleccionado = dia;
-    const nombreDia = this.obtenerNombreDia(dia); // lunes, martes, etc.
+ async seleccionarDia(dia: Date) {
+  this.diaSeleccionado = dia;
 
-    // Filtra horarios del especialista según el día seleccionado
-    const horariosDia = this.horariosDelEspecialista.filter(
-      (h: any) => h.dia_semana.toLowerCase() === nombreDia
+  const fecha = dia.toISOString().split('T')[0];
+  const nombreDia = this.obtenerNombreDia(dia);
+
+  const horariosDia = this.horariosDelEspecialista.filter(
+    (h: any) => h.dia_semana.toLowerCase() === nombreDia
+  );
+
+  this.horariosDisponibles = horariosDia.map((h: any) => h.hora_inicio);
+
+  const { data: turnosTomados } = await this.turnosService
+    .obtenerTurnosPorEspecialistaYFecha(
+      this.especialistaSeleccionado.id,
+      fecha
     );
 
-    this.horariosDisponibles = horariosDia.map((h: any) => h.hora_inicio);
-  }
+  const tomados = turnosTomados ?? [];
+  this.horasOcupadas = tomados.map((t: any) => t.hora);
+  this.horaSeleccionada = null;
+} 
 
   seleccionarHora(hora: string) {
     this.horaSeleccionada = hora;

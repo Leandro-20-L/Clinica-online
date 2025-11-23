@@ -38,9 +38,12 @@
       <h3>Seleccione un horario</h3>
       <div class="horas-grid">
         <button *ngFor="let h of horariosDisponibles"
-                (click)="seleccionarHora(h)"
-                [class.activo]="h === horaSeleccionada">
-          {{ h }}
+                (click)="!horasOcupadas.includes(h) && seleccionarHora(h)"
+          [class.activo]="h === horaSeleccionada"
+          [disabled]="horasOcupadas.includes(h)"
+          [class.ocupado]="horasOcupadas.includes(h)">
+    {{ h }}
+    <span *ngIf="horasOcupadas.includes(h)"><br> (Ocupado)</span>
         </button>
       </div>
     </div>

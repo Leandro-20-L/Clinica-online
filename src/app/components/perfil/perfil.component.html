@@ -38,46 +38,52 @@
   <button class="btn-cerrar" (click)="volver()">
   <img src="svgs/salir.svg" alt="">
 </button>
+<!--
 <div *ngIf="rol === 'especialista'" class="horarios-section">
   <button class="btn-horarios" (click)="abrirModalHorarios()">
     Configurar disponibilidad horaria
   </button>
 </div>
-
+-->
 <!-- Modal -->
 
-</div>
+<div class="horarios-config-container" *ngIf="rol === 'especialista'">
+  <h3>Disponibilidad horaria</h3>
 
-<div class="modal-overlay" *ngIf="mostrarModal">
-  <div class="modal">
-    <h3>{{ usuario?.nombre }} {{ usuario?.apellido }}, disponibilidad horaria</h3>
+  <div class="horario-row" *ngFor="let dia of diasSemana">
+    <label class="dia-label">{{ dia }}</label>
 
-    <div class="tabla-horarios-wrapper">
-    <table class="tabla-horarios">
-      <thead>
-        <tr>
-          <th>Día</th>
-          <th *ngFor="let hora of horas">{{ hora }}</th>
-        </tr>
-      </thead>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="disponibilidad[dia].disponible" />
+      <span class="slider"></span>
+    </label>
 
-      <tbody>
-        <tr *ngFor="let dia of diasSemana">
-          <td class="dia-label">{{ dia }}</td>
-          <td *ngFor="let hora of horas">
-            <input
-              type="checkbox"
-              [(ngModel)]="disponibilidad[dia][hora]"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
+    <select [(ngModel)]="disponibilidad[dia].desde" 
+            [disabled]="!disponibilidad[dia].disponible">
+      <option value="">Desde</option>
+      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+    </select>
 
-    <div class="modal-actions">
-      <button class="btn-guardar" (click)="guardarHorarios()">Guardar y salir</button>
-      <button class="btn-cancelar" (click)="cerrarModal()">Salir sin guardar</button>
+    <select [(ngModel)]="disponibilidad[dia].hasta" 
+            [disabled]="!disponibilidad[dia].disponible">
+      <option value="">Hasta</option>
+      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
+    </select>
+
+    
+    <div class="rango-resumen"
+         *ngIf="disponibilidad[dia].desde && disponibilidad[dia].hasta">
+      Horario:
+      <strong>{{ disponibilidad[dia].desde }}-</strong>
+    
+      <strong>{{ disponibilidad[dia].hasta }}</strong>
     </div>
   </div>
+
+  <button class="btn-guardar" (click)="guardarHorarios()">
+    Guardar disponibilidad
+  </button>
+</div>
+
+
 </div>

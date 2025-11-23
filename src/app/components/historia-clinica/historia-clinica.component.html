@@ -4,8 +4,9 @@
     <button class="btn-cerrar" (click)="cerrar()">
       ✖
     </button>
-
+    
     <h2>Historia clínica de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
+    
 
     <div class="historia-card" *ngFor="let h of historias">
       <h3>{{ h.especialidad }}</h3>
