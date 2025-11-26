@@ -4,6 +4,8 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+import * as XLSX from 'xlsx';
+
 @Component({
   selector: 'app-admin-dashboard',
   imports: [CommonModule],
@@ -64,4 +66,34 @@ export class AdminDashboardComponent implements OnInit {
   irA(seccion:string){
     this.router.navigate([`/${seccion}`])
   }
+
+  exportarExcelUsuarios() {
+  this.usuariosService.obtenerTodos().then(todos => {
+
+    // 🔹 Armamos los datos para el Excel
+     const sinAdmins = todos.filter((u: any) => u.rol !== 'admin');
+
+    const datos = sinAdmins.map((u: any) => ({
+      ID: u.uid || u.id,
+      Nombre: u.nombre,
+      Apellido: u.apellido,
+      DNI: u.dni,
+      Email: u.mail,
+      Rol: u.rol,
+      Especialidad:
+        u.especialidad ||
+        (Array.isArray(u.especialidades) ? u.especialidades.join(', ') : ''),
+    }));
+
+    // 🔹 Convertir JSON a hoja Excel
+    const hoja = XLSX.utils.json_to_sheet(datos);
+
+    // 🔹 Crear libro y agregar hoja
+    const libro = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(libro, hoja, 'Usuarios');
+
+    // 🔹 Descargar archivo
+    XLSX.writeFile(libro, 'usuarios_clinica_online.xlsx');
+  });
+}
 }

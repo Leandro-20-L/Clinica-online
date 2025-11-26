@@ -249,3 +249,17 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
   }
+
+  .btn-excel {
+  padding: 8px 16px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    background: #1b5e20;
+  }
+}

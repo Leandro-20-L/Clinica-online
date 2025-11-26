@@ -22,12 +22,15 @@
     "@angular/router": "^19.2.0",
     "@supabase/supabase-js": "^2.78.0",
     "@sweetalert2/ngx-sweetalert2": "^14.0.1",
+    "jspdf": "^3.0.4",
+    "jspdf-autotable": "^5.0.2",
     "ng-recaptcha": "^13.2.1",
     "ngx-captcha": "^14.0.0",
     "ngx-spinner": "^19.0.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.26.3",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

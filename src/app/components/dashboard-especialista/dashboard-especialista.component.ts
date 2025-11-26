@@ -96,7 +96,11 @@ cerrarListaPacientes() {
 
   async verHistorias(p: any) {
   this.viendoPaciente = p;
-  this.historiasPaciente = await this.turnosService.obtenerHistoriasClinicasPaciente(p.id);
+  const todas = await this.turnosService.obtenerHistoriasClinicasPaciente(p.id);
+
+  this.historiasPaciente = todas.filter(
+    (h: any) => h.id_especialista === this.especialista.id
+  );
 }
 
 cerrarHistorias() {

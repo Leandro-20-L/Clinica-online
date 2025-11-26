@@ -22,6 +22,12 @@
     <strong>Obra Social:</strong> {{ usuario.obra_social }}
   </p>
 
+  <div *ngIf="rol === 'paciente'" class="historia-clinica-accion">
+  <button class="btn-historias" (click)="verHistoriaClinica()">
+    Ver historia clínica
+  </button>
+</div>
+
   
   <p *ngIf="rol === 'especialista' && especialidades.length > 0">
   <strong>Especialidades:</strong> {{ especialidades.join(', ') }}
@@ -86,4 +92,18 @@
 </div>
 
 
+
+
 </div>
+
+<app-historia-clinica
+  *ngIf="mostrarHistoria"
+  [paciente]="usuario"
+  [historias]="historiasPaciente"
+  [cerrar]="cerrarHistoriaClinica.bind(this)"
+  [descargarPdf]="descargarPdfHistoria.bind(this)"
+   [descargarPdfEspecialista]="generarPDFDeEspecialista.bind(this)"
+    [descargarPdfCompleta]="descargarHistoriaCompleta.bind(this)"
+     [descargarPdfPorEspecialidad]="descargarPdfPorEspecialidad.bind(this)"
+     [habilitarFiltrosPorEspecialidad]="true">
+</app-historia-clinica>

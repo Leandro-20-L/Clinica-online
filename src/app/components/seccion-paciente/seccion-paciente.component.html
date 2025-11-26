@@ -1,28 +1,59 @@
 <div class="pacientes-container">
   <div class="pacientes-header">
-    <h2> Listado de Pacientes</h2>
-    <button class="btn-volver" (click)="volver()">← Volver al Panel</button>
+    <h2>Sección usuarios</h2>
+
+    <div class="acciones-header">
+      <button class="btn-excel" (click)="exportarExcelUsuarios()">
+         Excel general usuarios
+      </button>
+
+      <button class="btn-volver" (click)="volver()">← Volver al Panel</button>
+    </div>
   </div>
 
-  <table class="tabla-pacientes" *ngIf="pacientes.length > 0; else noPacientes">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>DNI</th>
-        <th>Edad</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let p of pacientes">
-        <td>{{ p.nombre }} {{ p.apellido }}</td>
-        <td>{{ p.mail }}</td>
-        <td>{{ p.dni }}</td>
-        <td>{{ p.edad }}</td>
-        
-      </tr>
-    </tbody>
-  </table>
+    <div
+    class="lista-usuarios"
+    *ngIf="pacientes.length > 0; else noPacientes"
+  >
+    <article class="usuario-card" *ngFor="let p of pacientes">
+      <div class="usuario-main">
+        <div class="usuario-img-wrapper">
+          <img
+            [src]="p.imagen1 || 'assets/usuarios/default.png'"
+            [alt]="p.nombre + ' ' + p.apellido"
+          />
+         
+        </div>
+
+        <div class="usuario-info">
+          <h3>{{ p.nombre }} {{ p.apellido }}</h3>
+          <p class="email">{{ p.mail }}</p>
+
+          <div class="fila-datos">
+            <p class="dato">
+              <span class="label">DNI:</span> {{ p.dni }}
+            </p>
+            <p class="dato">
+              <span class="label">Edad:</span> {{ p.edad }}
+            </p>
+            <p class="dato">
+              <span class="label">Role:</span> {{ p.rol }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="usuario-acciones">
+        <button
+          class="btn-excel-row"
+          *ngIf="p.rol === 'paciente'"
+          (click)="exportarExcelTurnosPaciente(p)"
+        >
+           Turnos en Excel
+        </button>
+      </div>
+    </article>
+  </div>
 
   <ng-template #noPacientes>
     <p class="vacio">No hay pacientes registrados.</p>

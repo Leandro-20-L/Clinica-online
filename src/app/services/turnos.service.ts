@@ -126,10 +126,16 @@ async obtenerHistoriasClinicasPaciente(idPaciente: number) {
     .from('historia_clinica')
     .select(`
       *,
-      turno!inner(
+      turno:turno!inner(
         fecha,
         hora,
-        especialidad
+        especialidad,
+        id_especialista,
+        especialista:usuarios!turno_id_especialista_fkey(
+          id,
+          nombre,
+          apellido
+        )
       )
     `)
     .eq('id_paciente', idPaciente)
@@ -138,6 +144,19 @@ async obtenerHistoriasClinicasPaciente(idPaciente: number) {
   if (error) throw error;
 
   return data;
+}
+
+async obtenerTurnosDePaciente(idPaciente: number) {
+  const { data, error } = await supabase
+    .from('turno')
+    .select(`
+      *,
+      especialista:usuarios!turno_id_especialista_fkey(id, nombre, apellido)
+    `)
+    .eq('id_paciente', idPaciente);
+
+  if (error) throw error;
+  return data || [];
 }
 
 async obtenerTurnosPorEspecialistaYFecha(id: number, fecha: string) {

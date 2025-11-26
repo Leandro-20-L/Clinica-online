@@ -1,20 +1,76 @@
-<div class="overlay" *ngIf="historias.length">
+<div class="hc-overlay" *ngIf="historias.length">
   <div class="modal-historia">
 
     <button class="btn-cerrar" (click)="cerrar()">
       ✖
     </button>
-    
+
     <h2>Historia clínica de {{ paciente.nombre }} {{ paciente.apellido }}</h2>
-    
 
-    <div class="historia-card" *ngFor="let h of historias">
-      <h3>{{ h.especialidad }}</h3>
-      <p class="fecha">{{ h.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</p>
+    <!-- PDF COMPLETA -->
+    <button
+      *ngIf="descargarPdfCompleta"
+      class="btn-pdf-general"
+      (click)="onClickPdfCompleta()">
+      Descargar historia clínica completa
+    </button>
 
+    <!-- CHIPS DE ESPECIALIDADES -->
+    <div class="especialidades-chips" *ngIf="habilitarFiltrosPorEspecialidad && especialidades.length">
+
+      <!-- Chip "Todas" -->
+      <button
+        class="chip-especialidad"
+        [class.activo]="!especialidadSeleccionada"
+        (click)="resetEspecialidad()">
+        Todas
+      </button>
+
+      <!-- Chips por especialidad -->
+      <button
+        *ngFor="let esp of especialidades"
+        (click)="seleccionarEspecialidad(esp)"
+        [class.activo]="esp === especialidadSeleccionada"
+        class="chip-especialidad">
+        {{ esp }}
+      </button>
+    </div>
+
+    <!-- PDF POR ESPECIALIDAD -->
+    <button
+      *ngIf="habilitarFiltrosPorEspecialidad && descargarPdfPorEspecialidad && especialidadSeleccionada"
+      class="btn-pdf-general"
+      (click)="onPdfEspecialidad()">
+      Descargar PDF por especialidad
+    </button>
+
+    <!-- HISTORIAS (FILTRADAS) -->
+    <div class="historia-card" *ngFor="let h of historiasFiltradas">
+      <div class="historia-header">
+        <p><strong>Especialidad:</strong> {{ h.turno?.especialidad }}</p>
+
+        <p>
+          <strong>Especialista:</strong>
+          {{ h.turno?.especialista?.nombre }} {{ h.turno?.especialista?.apellido }}
+        </p>
+
+        <p><strong>Paciente:</strong> {{ paciente?.nombre }} {{ paciente?.apellido }}</p>
+
+        <p>
+          <strong>Fecha:</strong>
+          {{ h.turno?.fecha }} - {{ h.turno?.hora }}
+        </p>
+
+        <button *ngIf="habilitarFiltrosPorEspecialidad" class="btn-pdf-card" (click)="onClickPdf(h)">
+          PDF
+        </button>
+      </div>
+      <!--
       <div class="dato">
         <strong>Reseña:</strong> {{ h.resena }}
       </div>
+
+    -->
 
       <div class="clinicos">
         <p><strong>Altura:</strong> {{ h.altura }} cm</p>
