@@ -6,11 +6,12 @@ import {MatSnackBar,MatSnackBarModule} from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 import { LoadingService } from '../../services/loading.service';
+import { SlideInDirectiveDirective } from '../../directivas/slide-in.directive.directive';
 
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule,ReactiveFormsModule, MatSnackBarModule],
+  imports: [CommonModule,ReactiveFormsModule, MatSnackBarModule,SlideInDirectiveDirective],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

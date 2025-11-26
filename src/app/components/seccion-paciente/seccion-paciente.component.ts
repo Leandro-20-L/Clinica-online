@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TurnosService } from '../../services/turnos.service';
 import * as XLSX from 'xlsx';
+import { SlideUpDirective } from '../../directivas/slide-up.directive';
 
 @Component({
   selector: 'app-seccion-paciente',
-  imports: [CommonModule],
+  imports: [CommonModule,SlideUpDirective],
   templateUrl: './seccion-paciente.component.html',
   styleUrl: './seccion-paciente.component.scss'
 })

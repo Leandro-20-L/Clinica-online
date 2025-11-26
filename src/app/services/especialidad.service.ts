@@ -28,7 +28,7 @@ export class EspecialidadService {
 
  
    async obtenerEspecialistasPorEspecialidad(especialidad: string) {
-    // Primero obtenemos todos los IDs de especialistas que tienen esa especialidad
+    
     const { data: relaciones, error: err1 } = await supabase
       .from('especialista_especialidad')
       .select('id_especialista')
@@ -39,7 +39,7 @@ export class EspecialidadService {
       return [];
     }
 
-    // Luego obtenemos los usuarios con esos IDs
+    // Luego traigo los usuarios con esos IDs de la tabla usuarios
     const ids = relaciones.map((r: any) => r.id_especialista);
     const { data: especialistas, error: err2 } = await supabase
       .from('usuarios')
