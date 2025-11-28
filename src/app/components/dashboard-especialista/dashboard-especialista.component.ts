@@ -114,13 +114,72 @@ cerrarHistorias() {
   }
 
   aplicarFiltro() {
-    this.turnosFiltrados = this.turnos
-      .filter(t => t.estado === this.filtro)
-      .filter(t =>
-        (t.especialidad + ' ' + t.usuarios?.nombre + ' ' + t.usuarios?.apellido)
-          .toLowerCase()
-          .includes(this.filtroTexto.toLowerCase())
+    const texto = this.filtroTexto.toLowerCase().trim();
+
+  this.turnosFiltrados = this.turnos.filter((t: any) => {
+    // 1) Filtro por estado (si se eligió uno)
+    if (this.filtro && this.filtro !== 'todos' && t.estado !== this.filtro) {
+      return false;
+    }
+
+    // 2) Si no hay texto, ya pasó el filtro de estado → mostrar
+    if (!texto) return true;
+
+    const partes: string[] = [];
+
+    // ----- Datos del turno -----
+    partes.push(
+      t.especialidad,
+      t.fecha,
+      t.hora,
+      t.estado,
+      t.comentario_cancelacion,
+      t.resena,
+      t.comentario_encuesta
+    );
+
+    // ----- Datos del paciente -----
+    partes.push(
+      t.usuarios?.nombre,
+      t.usuarios?.apellido,
+      t.usuarios?.obra_social
+    );
+
+    // ----- Historia clínica -----
+    const hc = t.historia_clinica;
+    if (hc) {
+      // Campos fijos
+      partes.push(
+        hc.altura?.toString(),
+        hc.peso?.toString(),
+        hc.temperatura?.toString(),
+        hc.presion
       );
+
+      // Campos dinámicos (jsonb)
+      [hc.dato_opcional_1, hc.dato_opcional_2, hc.dato_opcional_3].forEach(
+        (opt: any) => {
+          if (!opt) return;
+
+          if (typeof opt === 'object') {
+            // ej: { "diabetes": "sí", "fuma": "no" }
+            Object.entries(opt).forEach(([k, v]) => {
+              partes.push(k, String(v));
+            });
+          } else {
+            partes.push(String(opt));
+          }
+        }
+      );
+    }
+
+    // ¿Alguna parte contiene el texto?
+    const hayCoincidencia = partes
+      .filter(Boolean)                    // saco null/undefined/''
+      .some((p) => p.toLowerCase().includes(texto));
+
+    return hayCoincidencia;
+  });
   }
 
   cambiarFiltro(nuevo: string) {

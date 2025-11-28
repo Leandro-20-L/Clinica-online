@@ -21,6 +21,12 @@ export const routes: Routes = [
     loadComponent: () => import('./components/seccion-paciente/seccion-paciente.component').then(m => m.SeccionPacienteComponent)
   },
   {
+  path: 'estadisticas',
+  loadComponent: () =>
+    import('./components/admin-estadisticas/admin-estadisticas.component')
+      .then(c => c.AdminEstadisticasComponent)
+},
+  {
     path: 'admin',
     loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
     children: [

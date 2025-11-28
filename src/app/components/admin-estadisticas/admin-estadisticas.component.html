@@ -1,0 +1,160 @@
+<div class="stats-container">
+  <h2 class="stats-title">Estadísticas administrador</h2>
+
+  <!-- FILA 1 -->
+  <div class="stats-grid">
+    <!-- LOG DE INGRESOS -->
+    <section class="stats-card" #cardLog>
+      <h3>Log de ingresos al sistema</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Día</th>
+              <th>Horario</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of logs">
+              <td>{{ log.usuario }}</td>
+              <td>{{ log.fechaHora | fechaLocal:'fecha':-3 }}</td>
+<td>{{ log.fechaHora | fechaLocal:'hora':-3 }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn-pdf" (click)="generarPdfLog()">
+        Generar PDF
+      </button>
+    </section>
+
+    <!-- TURNOS POR ESPECIALIDAD -->
+    <section class="stats-card" #cardEspecialidad>
+      <h3>Cantidad de turnos por especialidad</h3>
+
+      <div class="chart-wrapper">
+        <canvas
+          
+          baseChart
+          [data]="turnosPorEspecialidadData"
+          [options]="turnosPorEspecialidadOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+
+      <button class="btn-pdf" (click)="generarPdfEspecialidad()">
+        Generar PDF
+      </button>
+    </section>
+  </div>
+
+  <!-- FILA 2: TURNOS POR DÍA + SOLICITADOS POR MÉDICO -->
+  <div class="stats-grid">
+    <!-- TURNOS POR DÍA -->
+    <section class="stats-card" #cardDia>
+      <h3>Cantidad de turnos por día</h3>
+
+      <div class="filtros">
+        <input
+          type="date"
+          [(ngModel)]="fechaTurnosDia"
+          (change)="onSeleccionarFechaDia()" />
+      </div>
+
+      <div class="chart-wrapper" >
+        <canvas
+         
+          baseChart
+          [data]="turnosPorDiaData"
+          [options]="turnosPorDiaOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+
+      <button class="btn-pdf" (click)="generarPdfDia()">
+        Generar PDF
+      </button>
+    </section>
+
+    <!-- TURNOS SOLICITADOS POR MÉDICO -->
+    <section class="stats-card" #cardSolicitados>
+      <h3>Cantidad de turnos solicitados por médico</h3>
+
+      <div class="filtros">
+        <select
+          [(ngModel)]="especialistaSolicitadosId"
+          (change)="actualizarTurnosSolicitados()">
+          <option [ngValue]="null" disabled>Selecciona especialista</option>
+          <option *ngFor="let e of especialistas" [ngValue]="e.id">
+            {{ e.apellido }}, {{ e.nombre }}
+          </option>
+        </select>
+
+        <input
+          type="date"
+          [(ngModel)]="fechaDesdeSolicitados"
+          (change)="actualizarTurnosSolicitados()" />
+        <input
+          type="date"
+          [(ngModel)]="fechaHastaSolicitados"
+          (change)="actualizarTurnosSolicitados()" />
+      </div>
+
+      <div class="chart-wrapper">
+        <canvas
+          baseChart
+          [data]="turnosSolicitadosData"
+          [options]="turnosSolicitadosOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+
+      <button class="btn-pdf" (click)="generarPdfSolicitados()">
+        Generar PDF
+      </button>
+    </section>
+  </div>
+
+  <!-- FILA 3: TURNOS FINALIZADOS POR MÉDICO -->
+  <div class="stats-grid">
+    <section class="stats-card" #cardFinalizados>
+      <h3>Cantidad de turnos finalizados por médico</h3>
+
+      <div class="filtros">
+        <select
+          [(ngModel)]="especialistaFinalizadosId"
+          (change)="actualizarTurnosFinalizados()">
+          <option [ngValue]="null" disabled>Selecciona especialista</option>
+          <option *ngFor="let e of especialistas" [ngValue]="e.id">
+            {{ e.apellido }}, {{ e.nombre }}
+          </option>
+        </select>
+
+        <input
+          type="date"
+          [(ngModel)]="fechaDesdeFinalizados"
+          (change)="actualizarTurnosFinalizados()" />
+        <input
+          type="date"
+          [(ngModel)]="fechaHastaFinalizados"
+          (change)="actualizarTurnosFinalizados()" />
+      </div>
+
+      <div class="chart-wrapper">
+        <canvas
+          baseChart
+          [data]="turnosFinalizadosData"
+          [options]="turnosFinalizadosOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+
+      <button class="btn-pdf" (click)="generarPdfFinalizados()">
+        Generar PDF
+      </button>
+    </section>
+  </div>
+</div>

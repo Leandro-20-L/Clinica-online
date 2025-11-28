@@ -79,11 +79,64 @@ cerrarModal() {
   }
 
    filtrarTurnos() {
-    const txt = this.filtro.toLowerCase().trim();
+   const txt = this.filtro.toLowerCase().trim();
 
-    this.turnosFiltrados = this.turnos.filter(t =>
-      t.especialidad.toLowerCase().includes(txt)
+  if (!txt) {
+    this.turnosFiltrados = [...this.turnos];
+    return;
+  }
+
+  this.turnosFiltrados = this.turnos.filter((t) => {
+    const partes: string[] = [];
+
+    // ----- Campos del turno -----
+    partes.push(
+      t.especialidad,
+      t.fecha,
+      t.hora,
+      t.estado,
+      t.usuarios?.nombre,
+      t.usuarios?.apellido,
+      t.resena,
+      t.comentario_cancelacion,
+      t.comentario_encuesta
     );
+
+    // ----- Historia clínica -----
+    const hc = t.historia_clinica;
+    if (hc) {
+      // fijos
+      partes.push(
+        hc.altura?.toString(),
+        hc.peso?.toString(),
+        hc.temperatura?.toString(),
+        hc.presion
+      );
+
+      // dinámicos 
+      [hc.dato_opcional_1, hc.dato_opcional_2, hc.dato_opcional_3].forEach(
+        (opt: any) => {
+          if (!opt) return;
+
+          if (typeof opt === 'object') {
+            // ej: { "diabetes": "sí", "fuma": "no" }
+            Object.entries(opt).forEach(([k, v]) => {
+              partes.push(k, String(v));
+            });
+          } else {
+            partes.push(String(opt));
+          }
+        }
+      );
+    }
+
+    // ¿Alguna parte contiene el texto?
+    const hayCoincidencia = partes
+      .filter(Boolean) // saca null/undefined/''
+      .some((p) => p.toLowerCase().includes(txt));
+
+    return hayCoincidencia;
+  });
   }
 
   async cancelarTurno(turno: any) {
@@ -100,7 +153,7 @@ cerrarModal() {
       await this.turnosService.cancelarTurno(turno.id_turno);
       Swal.fire('Cancelado', 'El turno fue cancelado.', 'success');
       this.turnos = this.turnos.filter(t => t.id_turno !== turno.id_turno);
-       this.turnos = this.turnos.filter(t => t.id_turno !== turno.id_turno);
+      
       this.filtrarTurnos();
     }
   }

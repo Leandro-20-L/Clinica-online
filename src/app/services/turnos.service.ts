@@ -23,7 +23,7 @@ export class TurnosService {
   }
 
   async obtenerTurnosPaciente(idPaciente: number) {
-  const { data, error } = await supabase
+   const { data, error } = await supabase
     .from('turno')
     .select(`
       id_turno,
@@ -37,7 +37,19 @@ export class TurnosService {
       resena,
       calificacion,
       completo_encuesta,
-      usuarios:usuarios!turno_id_especialista_fkey (nombre, apellido)
+      usuarios:usuarios!turno_id_especialista_fkey (
+        nombre,
+        apellido
+      ),
+      historia_clinica (
+        altura,
+        peso,
+        temperatura,
+        presion,
+        dato_opcional_1,
+        dato_opcional_2,
+        dato_opcional_3
+      )
     `)
     .eq('id_paciente', idPaciente)
     .order('fecha', { ascending: true });
@@ -47,7 +59,7 @@ export class TurnosService {
     return [];
   }
 
-  return data;
+  return data ?? [];
 }
 
 
@@ -61,17 +73,41 @@ async cancelarTurno(idTurno: number) {
 }
 
 async obtenerTurnosEspecialista(idEspecialista: number) {
-  const { data, error } = await supabase
+ const { data, error } = await supabase
     .from('turno')
     .select(`
-      id_turno,id_paciente,id_especialista, fecha, hora, estado, especialidad,comentario_cancelacion,resena,
-      usuarios!turno_id_paciente_fkey(id,nombre, apellido, obra_social)
+      id_turno,
+      id_paciente,
+      id_especialista,
+      fecha,
+      hora,
+      estado,
+      especialidad,
+      comentario_cancelacion,
+      resena,
+      calificacion,
+      completo_encuesta,
+      usuarios!turno_id_paciente_fkey (
+        id,
+        nombre,
+        apellido,
+        obra_social
+      ),
+      historia_clinica (
+        altura,
+        peso,
+        temperatura,
+        presion,
+        dato_opcional_1,
+        dato_opcional_2,
+        dato_opcional_3
+      )
     `)
     .eq('id_especialista', idEspecialista)
     .order('fecha', { ascending: true });
 
   if (error) throw error;
-  return data;
+  return data ?? [];
 }
 
   async actualizarEstadoTurno(idTurno: number, nuevoEstado: string, comentario?: string) {
@@ -182,6 +218,112 @@ async obtenerPacientePorId(id: number) {
 
   return data;
 }
+
+ async obtenerCantidadTurnosPorEspecialidad() {
+    const { data, error } = await supabase
+      .from('turno')
+      .select('especialidad');
+
+    if (error) throw error;
+
+    const conteo: Record<string, number> = {};
+
+    for (const t of data as any[]) {
+      const esp = t.especialidad || 'Sin especialidad';
+      conteo[esp] = (conteo[esp] || 0) + 1;
+    }
+
+    return Object.entries(conteo).map(([especialidad, count]) => ({
+      especialidad,
+      count
+    }));
+  }
+
+  // 2) Cantidad de turnos por día (con rango opcional)
+  async obtenerCantidadTurnosPorDia(desde?: string, hasta?: string) {
+    let query = supabase
+      .from('turno')
+      .select('fecha');
+
+    if (desde) {
+      query = query.gte('fecha', desde);
+    }
+    if (hasta) {
+      query = query.lte('fecha', hasta);
+    }
+
+    const { data, error } = await query;
+
+    if (error) throw error;
+
+    const conteo: Record<string, number> = {};
+
+    for (const t of data as any[]) {
+      const fecha = t.fecha;          // '2025-11-26'
+      conteo[fecha] = (conteo[fecha] || 0) + 1;
+    }
+
+    return Object.entries(conteo)
+      .sort(([f1], [f2]) => f1.localeCompare(f2))
+      .map(([fecha, count]) => ({ fecha, count }));
+  }
+
+  // 3) Turnos SOLICITADOS por médico en un lapso
+  async obtenerTurnosSolicitadosPorMedico(
+    idEspecialista: number,
+    desde: string,
+    hasta: string
+  ) {
+    const { data, error } = await supabase
+      .from('turno')
+      .select('fecha, estado')
+      .eq('id_especialista', idEspecialista)
+      .gte('fecha', desde)
+      .lte('fecha', hasta);
+      // si querés excluir cancelados/rechazados:
+      // .not('estado', 'in', '("cancelado","rechazado")');
+
+    if (error) throw error;
+
+    const conteo: Record<string, number> = {};
+
+    for (const t of data as any[]) {
+      const fecha = t.fecha;
+      conteo[fecha] = (conteo[fecha] || 0) + 1;
+    }
+
+    return Object.entries(conteo)
+      .sort(([f1], [f2]) => f1.localeCompare(f2))
+      .map(([fecha, count]) => ({ fecha, count }));
+  }
+
+  // 4) Turnos FINALIZADOS por médico en un lapso
+  async obtenerTurnosFinalizadosPorMedico(
+    idEspecialista: number,
+    desde: string,
+    hasta: string
+  ) {
+    const { data, error } = await supabase
+      .from('turno')
+      .select('fecha')
+      .eq('id_especialista', idEspecialista)
+      .eq('estado', 'realizado')    // ajustá si tu estado se llama distinto
+      .gte('fecha', desde)
+      .lte('fecha', hasta);
+
+    if (error) throw error;
+
+    const conteo: Record<string, number> = {};
+
+    for (const t of data as any[]) {
+      const fecha = t.fecha;
+      conteo[fecha] = (conteo[fecha] || 0) + 1;
+    }
+
+    return Object.entries(conteo)
+      .sort(([f1], [f2]) => f1.localeCompare(f2))
+      .map(([fecha, count]) => ({ fecha, count }));
+  }
 
 }
 

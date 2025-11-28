@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 import { LoadingService } from '../../services/loading.service';
 import { SlideInDirectiveDirective } from '../../directivas/slide-in.directive.directive';
+import { LogsService } from '../../services/logs.service';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class LoginComponent {
     private snackBar: MatSnackBar, 
     private authService: AuthService,
     private usuariosService: UsuariosService,
-    private loadingService : LoadingService
+    private loadingService : LoadingService,
+    private logsService : LogsService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -52,6 +54,8 @@ export class LoginComponent {
       await this.usuariosService.actualizar(user.id, { verificado: true });
       usuario.verificado = true; 
     }
+
+    await this.logsService.registrarIngreso(usuario.id);
 
    
     if (!usuario.verificado) {
@@ -110,6 +114,4 @@ export class LoginComponent {
    goToRegister() {
     this.router.navigate(['/register']);
   }
-
-  
 }
