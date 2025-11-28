@@ -66,16 +66,21 @@ cerrarModal() {
      const uid = await this.authService.getUserUid();
     this.paciente = await this.authService.obtenerUsuarioPorUID(uid!);
 
-    const turnosDB = await this.turnosService.obtenerTurnosPaciente(this.paciente.id);
+    this.turnos = await this.turnosService.obtenerTurnosPaciente(this.paciente.id);
 
+    /*
     const ahora = new Date();
 
+  
     this.turnos = turnosDB.filter((t: any) => {
       const turnoFechaHora = new Date(`${t.fecha}T${t.hora}`);
       return turnoFechaHora > ahora;
     });
-
+    */
+     
     this.turnosFiltrados = [...this.turnos];
+
+   
   }
 
    filtrarTurnos() {

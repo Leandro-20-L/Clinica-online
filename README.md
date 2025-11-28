@@ -45,7 +45,7 @@ Incluye:
 - Consulta todos los turnos  
 - Cancela turnos  
 - Descarga listado de usuarios 
-- (Actualmente incompleto) 
+
 
 ---
 
@@ -73,40 +73,44 @@ A continuación se detallan las pantallas del sistema.
 ---
 
 ## 📋 Dashboard Paciente
-![Dashboard Paciente](URL_DE_LA_IMAGEN)
+![Dashboard Paciente](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/dash-paciente.png)
 
 ---
 
 ## 📅 Solicitar Turno
-![Solicitar Turno](URL_DE_LA_IMAGEN)
+![Solicitar Turno](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/solicitar-turno.png)
 
 ---
 
 ## 🗂️ Mis Turnos (Paciente)
-![Mis Turnos Paciente](URL_DE_LA_IMAGEN)
+![Mis Turnos Paciente](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/mis-turnos.png)
 
 ---
 
 ## 👨‍⚕️ Dashboard Especialista
-![Dashboard Especialista](URL_DE_LA_IMAGEN)
+![Dashboard Especialista](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/dash-especialista.png)
 
 ---
 
 ## 🕒 Mis Horarios (Especialista)
-![Mis Horarios](URL_DE_LA_IMAGEN)
+![Mis Horarios](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/Horarios.png)
 
 ---
 
 ## 🧬 Historia Clínica
-![Historia Clínica](URL_DE_LA_IMAGEN)
+![Historia Clínica](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/historia-clinica.png)
 
 ---
 
-## 📝 Encuesta del Paciente
-![Encuesta](URL_DE_LA_IMAGEN)
+## Estadisticas
+![Encuesta](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/stats.png)
+
+
 
 ---
 
-## README en proceso
+## Dashboard-admin
+![Encuesta](https://tzjjisjaosuixdzosavk.supabase.co/storage/v1/object/public/pantallas/dash-admin.png)
 
-- {version : 1.0} 
+---
+

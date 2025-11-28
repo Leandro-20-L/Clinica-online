@@ -1,7 +1,7 @@
 <div class="perfil-card">
   <img [src]="usuario?.imagen1 || 'assets/imgs/default-user.png'" alt="Foto de perfil" class="perfil-img" />
 
-  <h2>{{ usuario?.nombre }} {{ usuario?.apellido }}</h2>
+  <h2>{{ usuario?.nombre | capitalizar }} {{ usuario?.apellido | capitalizar}}</h2>
 
   <span
     class="rol-badge"
@@ -14,12 +14,12 @@
     {{ rol | titlecase }}
   </span>
 
-  <p><strong>DNI:</strong> {{ usuario?.dni }}</p>
+  <p><strong>DNI:</strong> {{ usuario?.dni | ocultarParcial:4 }}</p>
   <p><strong>Correo:</strong> {{ usuario?.mail }}</p>
 
   
   <p *ngIf="rol === 'paciente' && usuario?.obra_social">
-    <strong>Obra Social:</strong> {{ usuario.obra_social }}
+    <strong>Obra Social:</strong> {{ usuario.obra_social | mayus }}
   </p>
 
   <div *ngIf="rol === 'paciente'" class="historia-clinica-accion">

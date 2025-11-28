@@ -61,20 +61,20 @@ export class SolicitarTurnoComponent {
   async ngOnInit() {
      this.especialistas = await this.especialidadService.obtenerTodosLosEspecialistas();
 
-  // 1) usuario actual (admin o paciente)
+  
   const uid = await this.authService.getUserUid();
   this.paciente = await this.authService.obtenerUsuarioPorUID(uid!);
   this.esAdmin = this.paciente.rol === 'admin';
 
-  // 2) miro si vino idPaciente en la ruta (caso admin)
+ 
   const idParam = this.route.snapshot.paramMap.get('idPaciente');
 
   if (this.esAdmin && idParam) {
-    // ADMIN que vino con /solicitar-turno/:idPaciente
+    
     const idPaciente = Number(idParam);
     this.pacienteSeleccionado = await this.usuariosService.obtenerPorId(idPaciente);
   } else {
-    // PACIENTE normal → se agenda turno para sí mismo
+    
     this.pacienteSeleccionado = this.paciente;
   }
   }

@@ -43,7 +43,7 @@
 
 .btn-turno {
   padding: 8px 14px;
-  background: linear-gradient(90deg, #1e88e5, #6c63ff);
+  background: #1e88e5;
   color: white;
   border: none;
   border-radius: 8px;
@@ -52,12 +52,4 @@
   transition: 0.25s;
 }
 
-.btn-turno:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(90deg, #1565c0, #5a54e1);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
 
-.btn-turno:active {
-  transform: scale(0.96);
-}

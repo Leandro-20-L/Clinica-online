@@ -9,6 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TurnosService } from '../../services/turnos.service';
 import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 import jsPDF from 'jspdf';
+import { OcultarParcialPipe } from '../../pipes/ocultar-parcial.pipe';
+import { CapitalizarPipe } from '../../pipes/capitalizar.pipe';
+import { MayusPipe } from '../../pipes/mayus.pipe';
 
  type DiaSemana = 'Lunes' | 'Martes' | 'Miercoles' | 'Jueves' | 'Viernes' | 'Sabado';
 
@@ -22,7 +25,7 @@ type Disponibilidad = { [dia in DiaSemana]: DisponibilidadDia };
 
 @Component({
   selector: 'app-perfil',
-  imports: [CommonModule,FormsModule,MatSnackBarModule,HistoriaClinicaComponent],
+  imports: [CommonModule,FormsModule,MatSnackBarModule,HistoriaClinicaComponent,OcultarParcialPipe,CapitalizarPipe,MayusPipe],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss',
 })
