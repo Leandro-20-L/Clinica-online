@@ -1,9 +1,7 @@
 <div class="register-container">
   <div class="register-card">
 
-    
     <h3 class="subtitle" *ngIf="!rolSeleccionado"></h3>
-
 
     <div class="seleccion-rol" *ngIf="!rolSeleccionado">
       <div class="roles">
@@ -14,10 +12,6 @@
           <img src="usuarios/especialista.svg" alt="Especialista" />
         </button>
       </div>
-
-      
-
-      
     </div>
 
     <form *ngIf="rolSeleccionado" [formGroup]="registerForm" (ngSubmit)="onRegister()">
@@ -26,22 +20,18 @@
       <div class="form-grid">
       <div class="form-group" *ngFor="let campo of camposComunes">
         <label>{{ campo.label }}</label>
-        <input [type]="campo.type" [formControlName]="campo.control" [placeholder]="campo.placeholder" />
+        <input [type]="campo.type" [formControlName]="campo.control" [placeholder]="campo.placeholder" appInputError/>
         <small
       *ngIf="
         registerForm.get(campo.control)?.hasError('required') &&
-        registerForm.get(campo.control)?.touched
-      "
-    >
+        registerForm.get(campo.control)?.touched">
       Este campo es obligatorio
     </small>
      <small
       *ngIf="
         campo.control === 'edad' &&
         registerForm.get('edad')?.hasError('min') &&
-        rolSeleccionado === 'especialista'
-      "
-    >
+        rolSeleccionado === 'especialista'">
       Debe tener al menos 18 años 
     </small>
       </div>
@@ -50,7 +40,7 @@
       <ng-container *ngIf="rolSeleccionado === 'paciente'">
         <div class="form-group">
           <label>Obra Social</label>
-          <input formControlName="obraSocial" placeholder="Ej: Swiss Medical" />
+          <input formControlName="obraSocial" placeholder="Ej: Swiss Medical" appInputError />
         </div>
         <div class="form-group">
           <label>Imagen de perfil 1</label>
@@ -66,17 +56,16 @@
       </ng-container>
 
      <ng-container *ngIf="rolSeleccionado === 'especialista'">
-  <!-- Select con especialidades existentes 
+  
   <div class="form-group">
     <label>Especialidades existentes</label>
     <select formControlName="especialidades" >
-      <option *ngFor="let esp of especialidades" [value]="esp">{{ esp }}</option>
+      <option *ngFor="let esp of especialidades" [ngValue]="esp">{{ esp }}</option>
     </select>
-    <small>Puedes seleccionar una o varias (Ctrl/Cmd para múltiple selección)</small>
+    
   </div>
 
-  -->
-
+  
   <!-- Input opcional para nuevas especialidades separadas por comas -->
   <div class="form-group">
     <label>Agregar especialidad/es</label>
@@ -95,7 +84,7 @@
   </div>
 </ng-container>
 
-     <div class="form-group captcha-container">
+     <div class="form-group captcha-container" *ngIf="!modoAdmin">
         <re-captcha
             [siteKey]="siteKey"
             (resolved)="onCaptchaResolved($event)">

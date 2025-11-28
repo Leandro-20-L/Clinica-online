@@ -29,6 +29,16 @@ export class UsuariosService {
     return data || [];
   }
 
+  async obtenerPorId(id: number) {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('*')
+    .eq('id', id)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
  
   async obtenerPorUID(uid: string): Promise<any | null> {
     const { data, error } = await supabase

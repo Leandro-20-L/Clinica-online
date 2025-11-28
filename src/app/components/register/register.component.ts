@@ -1,24 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UsuariosService } from '../../services/usuarios.service';
 import Swal from 'sweetalert2';
 import {  RecaptchaModule } from 'ng-recaptcha';
 import { environment } from '../../../environments/environments';
 import { LoadingService } from '../../services/loading.service';
+import { EspecialidadService } from '../../services/especialidad.service';
+import { InputErrorDirective } from '../../directivas/input-error.directive';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule,CommonModule,RecaptchaModule],
+  imports: [ReactiveFormsModule,CommonModule,RecaptchaModule,InputErrorDirective],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+
+  @Input() modoAdmin: boolean = false;
   registerForm!: FormGroup;
   rolSeleccionado: string | null = null;
-  especialidades = ['Cardiología', 'Pediatría', 'Dermatología', 'Neurología'];
+  especialidades: string []= [];
   imagenes: File[] = [];
   
   imagenesPreview: string[] = [];
@@ -39,9 +43,22 @@ export class RegisterComponent {
     private router: Router,
     private authService : AuthService,
     private usuariosService : UsuariosService,
-  private loadingService: LoadingService) {
+  private loadingService: LoadingService,
+private especialidadService : EspecialidadService,
+private route: ActivatedRoute) {
     this.initForm();
   }
+  async ngOnInit() {
+  await this.cargarEspecialidades();
+  if (this.router.url.startsWith('/admin')) {
+    this.modoAdmin = true;
+  }
+    if (this.modoAdmin) {
+    const recaptchaCtrl = this.registerForm.get('recaptcha');
+    recaptchaCtrl?.clearValidators();          // quita el Validators.required
+    recaptchaCtrl?.updateValueAndValidity();
+  }
+}
 
   initForm() {
     this.registerForm = this.fb.group({
@@ -104,9 +121,13 @@ export class RegisterComponent {
     const data = { ...this.registerForm.value };
 
     // normaliza especialidades seleccionadas
-    let especialidadesSeleccionadas: string[] = Array.isArray(data.especialidades)
-  ? [...data.especialidades]
-  : [];
+   let especialidadesSeleccionadas: string[] = [];
+
+if (Array.isArray(data.especialidades)) {
+  especialidadesSeleccionadas = [...data.especialidades];  
+} else if (typeof data.especialidades === 'string' && data.especialidades.trim() !== '') {
+  especialidadesSeleccionadas = [data.especialidades.trim()];
+}
 
 // --- Si escribió nuevas especialidades separadas por coma ---
 if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
@@ -189,6 +210,7 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
 
       
       if (this.rolSeleccionado === 'especialista' && idUsuario) {
+        console.log('ESPECIALIDADES A GUARDAR:', especialidadesSeleccionadas);
         for (const esp of especialidadesSeleccionadas) {
           await this.usuariosService.agregarEspecialidad(idUsuario, esp);
         }
@@ -205,7 +227,13 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
         confirmButtonText: 'Aceptar'
       });
 
-      this.router.navigate(['/login']);
+       if (this.modoAdmin) {
+    
+    this.router.navigate(['/admin']);
+  } else {
+    
+    this.router.navigate(['/login']);
+  }
     } catch (err: any) {
        this.loadingService.ocultarSpinner();
 
@@ -230,6 +258,17 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
   }
 }
 
+private async cargarEspecialidades() {
+  try {
+    const especialidades = await this.especialidadService.obtenerEspecialidades();
+
+    this.especialidades = especialidades;  // ya es string[]
+
+  } catch (err) {
+    console.error('Error al cargar especialidades', err);
+  }
+}
+
   goToLogin() {
     this.router.navigate(['/login']);
   }
@@ -239,7 +278,7 @@ if (data.nuevasEspecialidades && data.nuevasEspecialidades.trim() !== '') {
   if (!this.rolSeleccionado || this.registerForm.invalid) return false;
 
  
-  if (!this.registerForm.get('recaptcha')?.value) return false;
+  if (!this.modoAdmin && !this.registerForm.get('recaptcha')?.value) return false;
 
   
   if (this.rolSeleccionado === 'paciente' && this.imagenes.length < 2) return false;

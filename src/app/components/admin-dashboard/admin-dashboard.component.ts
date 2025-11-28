@@ -48,7 +48,8 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   abrirModalNuevoUsuario() {
-    console.log('Funcionalidad para crear nuevo usuario (Sprint 2)');
+    //console.log('Funcionalidad para crear nuevo usuario (Sprint 2)');
+    console.log("hola");
   }
 
   async logout() {
@@ -61,7 +62,17 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   irA(seccion:string){
+    console.log('Navegando a:', seccion);
     this.router.navigate([`/${seccion}`])
   }
+
+  SolicitarTurno(paciente: any){
+    
+    this.router.navigate(['/solicitar-turno', paciente.id]);
+  }
+
+  irAltaUsuario() {
+  this.router.navigate(['/admin/alta-usuario']);
+}
 }
 

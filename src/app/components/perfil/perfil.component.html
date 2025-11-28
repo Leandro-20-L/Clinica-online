@@ -57,33 +57,67 @@
   <h3>Disponibilidad horaria</h3>
 
   <div class="horario-row" *ngFor="let dia of diasSemana">
-    <label class="dia-label">{{ dia }}</label>
-
-    <label class="switch">
-      <input type="checkbox" [(ngModel)]="disponibilidad[dia].disponible" />
-      <span class="slider"></span>
-    </label>
-
-    <select [(ngModel)]="disponibilidad[dia].desde" 
-            [disabled]="!disponibilidad[dia].disponible">
-      <option value="">Desde</option>
-      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
-    </select>
-
-    <select [(ngModel)]="disponibilidad[dia].hasta" 
-            [disabled]="!disponibilidad[dia].disponible">
-      <option value="">Hasta</option>
-      <option *ngFor="let h of horas" [value]="h">{{ h }}</option>
-    </select>
-
-    
-    <div class="rango-resumen"
-         *ngIf="disponibilidad[dia].desde && disponibilidad[dia].hasta">
-      Horario:
-      <strong>{{ disponibilidad[dia].desde }}-</strong>
-    
-      <strong>{{ disponibilidad[dia].hasta }}</strong>
+    <!-- Día -->
+    <div class="col-dia">
+      <span class="dia-label">{{ dia }}</span>
     </div>
+
+    <!-- Switch -->
+    <div class="col-switch">
+      <label class="switch">
+        <input
+          type="checkbox"
+          [(ngModel)]="disponibilidad[dia].disponible"
+        />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <!-- Inputs de tiempo -->
+    <div
+      class="col-horas"
+      [class.disabled]="!disponibilidad[dia].disponible"
+    >
+      <div class="hora-field">
+        <span class="label">Desde</span>
+        <input
+          type="time"
+          [min]="minHora"
+          [max]="maxHora"
+          step="1800"
+          [(ngModel)]="disponibilidad[dia].desde"
+          [disabled]="!disponibilidad[dia].disponible"
+          (change)="normalizarHora(dia, 'desde')"
+        />
+      </div>
+
+      <div class="hora-field">
+        <span class="label">Hasta</span>
+        <input
+          type="time"
+          [min]="minHora"
+          [max]="maxHora"
+          step="1800"
+          [(ngModel)]="disponibilidad[dia].hasta"
+          [disabled]="!disponibilidad[dia].disponible"
+          (change)="normalizarHora(dia, 'hasta')"
+        />
+      </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="col-resumen"
+         *ngIf="disponibilidad[dia].disponible &&
+                disponibilidad[dia].desde &&
+                disponibilidad[dia].hasta">
+      <span class="resumen">
+        {{ disponibilidad[dia].desde }} - {{ disponibilidad[dia].hasta }}
+      </span>
+    </div>
+  </div>
+
+  <div class="error-horarios" *ngIf="errorHorarios">
+    {{ errorHorarios }}
   </div>
 
   <button class="btn-guardar" (click)="guardarHorarios()">

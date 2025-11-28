@@ -1,6 +1,19 @@
 <div class="solicitar-container">
   <h2>Solicitar turno</h2>
 
+   <div *ngIf="esAdmin" class="bloque-paciente">
+    <h3>Seleccione un paciente</h3>
+    <select
+      [(ngModel)]="pacienteSeleccionado"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <option [ngValue]="null" disabled>Elija un paciente...</option>
+      <option *ngFor="let p of pacientes" [ngValue]="p">
+        {{ p.apellido }}, {{ p.nombre }} - DNI: {{ p.dni }}
+      </option>
+    </select>
+  </div>
+
   <!--  Seleccionar profesional -->
   <div *ngIf="!especialistaSeleccionado">
     <h3>Seleccione un profesional</h3>
@@ -17,7 +30,7 @@
     <h3>Especialidades de {{ especialistaSeleccionado.nombre }}</h3>
     <div class="grid-especialidades">
       <button *ngFor="let esp of especialidadesDelProfesional" (click)="seleccionarEspecialidad(esp)">
-        <img [src]=" 'usuarios/default.png'" alt="Especialidad" />
+         <img [src]="obtenerIconoEspecialidad(esp)" alt="Especialidad" />
         <span>{{ esp }}</span>
       </button>
     </div>
@@ -48,7 +61,7 @@
       </div>
     </div>
 
-    <button *ngIf="horaSeleccionada" class="btn-confirmar" (click)="confirmarTurno()">
+    <button *ngIf="horaSeleccionada" class="btn-confirmar" (click)="confirmarTurno()" [disabled]="esAdmin && !pacienteSeleccionado">
       Confirmar turno
     </button>
   </div>

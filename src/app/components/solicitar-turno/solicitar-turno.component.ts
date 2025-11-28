@@ -7,6 +7,8 @@ import { DiaEsPipe } from '../../pipes/dia-es.pipe';
 import { TurnosService } from '../../services/turnos.service';
 import { AuthService } from '../../services/auth.service';
 import { HorariosService } from '../../services/horarios.service';
+import { UsuariosService } from '../../services/usuarios.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-solicitar-turno',
@@ -20,6 +22,11 @@ export class SolicitarTurnoComponent {
    especialidadesDelProfesional: string[] = [];
   paciente: any = null;
 
+   pacienteSeleccionado: any = null;  // paciente al que se le crea el turno
+  esAdmin = false;
+  pacientes: any[] = [];   
+  usuarioActual: any = null; 
+
   especialidadSeleccionada: string | null = null;
   especialistaSeleccionado: any = null;
 
@@ -31,18 +38,54 @@ export class SolicitarTurnoComponent {
   horariosDelEspecialista: any[] = []; 
   horasOcupadas: string[] = [];
 
+  private iconosEspecialidad: Record<string, string> = {
+    //'Cardiología': 'especialidades/cardiologia.png',
+    //'Pediatría': 'especialidades/pediatria.png',
+    'Dermatología': 'especialidades/Dermatología.jpg',
+    'Tricología': 'especialidades/Tricología.jpg',
+    'Traumatología': 'especialidades/Traumatología.jpg',
+    // agregá las que uses
+  };
+
+  private iconoDefault = 'usuarios/default.png';
+
   constructor(
     private especialidadService: EspecialidadService,
     private turnosService: TurnosService,
     private authService: AuthService,
-    private horariosService: HorariosService
+    private horariosService: HorariosService,
+    private usuariosService: UsuariosService,
+    private route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
      this.especialistas = await this.especialidadService.obtenerTodosLosEspecialistas();
 
-    const uid = await this.authService.getUserUid();
-    this.paciente = await this.authService.obtenerUsuarioPorUID(uid!);
+  // 1) usuario actual (admin o paciente)
+  const uid = await this.authService.getUserUid();
+  this.paciente = await this.authService.obtenerUsuarioPorUID(uid!);
+  this.esAdmin = this.paciente.rol === 'admin';
+
+  // 2) miro si vino idPaciente en la ruta (caso admin)
+  const idParam = this.route.snapshot.paramMap.get('idPaciente');
+
+  if (this.esAdmin && idParam) {
+    // ADMIN que vino con /solicitar-turno/:idPaciente
+    const idPaciente = Number(idParam);
+    this.pacienteSeleccionado = await this.usuariosService.obtenerPorId(idPaciente);
+  } else {
+    // PACIENTE normal → se agenda turno para sí mismo
+    this.pacienteSeleccionado = this.paciente;
+  }
+  }
+
+  obtenerIconoEspecialidad(nombre: string): string {
+    if (!nombre) return this.iconoDefault;
+
+    // Normalizar por si viene con mayúsculas/minúsculas distintas
+    const clave = nombre.trim();
+
+    return this.iconosEspecialidad[clave] || this.iconoDefault;
   }
 
   generarProximosDias() {
@@ -101,7 +144,7 @@ export class SolicitarTurnoComponent {
     }
 
     const nuevoTurno = {
-      id_paciente: this.paciente.id,
+      id_paciente: this.pacienteSeleccionado.id,
       id_especialista: this.especialistaSeleccionado.id,
       especialidad: this.especialidadSeleccionada,
       fecha: this.diaSeleccionado.toISOString().split('T')[0],

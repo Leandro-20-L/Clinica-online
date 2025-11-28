@@ -16,24 +16,12 @@ export class HorariosService {
   }
 
   async guardarDisponibilidad(id_especialista: number, horarios: any[]) {
-    // Elimina los horarios anteriores
+    
     await supabase.from('horarios').delete().eq('id_especialista', id_especialista);
-    // Inserta los nuevos
+    
     const { error } = await supabase.from('horarios').insert(horarios);
     if (error) throw error;
   }
 
-  async obtenerEspecialidades(idEspecialista: number) {
-  const { data, error } = await supabase
-    .from('especialista_especialidad')
-    .select('especialidad')
-    .eq('id_especialista', idEspecialista);
-
-  if (error) {
-    console.error('Error al obtener especialidades:', error);
-    return [];
-  }
-
-  return data || [];
-}
+  
 }

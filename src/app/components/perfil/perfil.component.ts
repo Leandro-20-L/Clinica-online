@@ -35,6 +35,10 @@ export class PerfilComponent {
   mostrarHistoria = false;
   historiasPaciente: any[] = [];
 
+   minHora = '08:00';
+  maxHora = '19:00';
+  errorHorarios = '';
+
   diasSemana: DiaSemana[] = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
   horas = [
     '08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30',
@@ -112,32 +116,104 @@ export class PerfilComponent {
   return intervalos;
 }
 
-async guardarHorarios() {
-  const seleccionados: any[] = [];
-
-  for (const dia of this.diasSemana) {
+ normalizarHora(dia: DiaSemana, tipo: 'desde' | 'hasta') {
     const info = this.disponibilidad[dia];
+  const valor = info[tipo];
 
-    if (!info.disponible || !info.desde || !info.hasta) continue;
-
-    const horasGeneradas = this.generarIntervalos(info.desde, info.hasta);
-
-    horasGeneradas.forEach(h => {
-      seleccionados.push({
-        id_especialista: this.usuario.id,
-        dia_semana: dia.toLowerCase(),
-        hora_inicio: h
-      });
-    });
+  if (!valor) {
+    return;
   }
 
-  await this.horariosService.guardarDisponibilidad(this.usuario.id, seleccionados);
+  let partes = valor.split(':');
+  let h = Number(partes[0]);
+  let m = Number(partes[1]);
 
-  this.snackBar.open('Disponibilidad actualizada.', 'Cerrar', {
-    duration: 3000,
-    panelClass: ['snackbar-ok'],
-  });
+  
+  if (m < 15) {
+    m = 0;
+  } else if (m < 45) {
+    m = 30;
+  } else {
+    m = 0;
+    h = h + 1;
+  }
+
+  
+  const minParts = this.minHora.split(':').map(Number);
+  const maxParts = this.maxHora.split(':').map(Number);
+  const minutosMin = minParts[0] * 60 + minParts[1];
+  const minutosMax = maxParts[0] * 60 + maxParts[1];
+
+  const total = h * 60 + m;
+
+  if (total < minutosMin) {
+    h = minParts[0];
+    m = minParts[1];
+  }
+
+  if (total > minutosMax) {
+    h = maxParts[0];
+    m = maxParts[1];
+  }
+
+  const hh = h.toString().padStart(2, '0');
+  const mm = m.toString().padStart(2, '0');
+
+  info[tipo] = `${hh}:${mm}`;
+  }
+
+  private esRangoValido(desde: string, hasta: string): boolean {
+    if (!desde || !hasta) return false;
+    const [hd, md] = desde.split(':').map(Number);
+    const [hh, mh] = hasta.split(':').map(Number);
+    const inicio = hd * 60 + md;
+    const fin = hh * 60 + mh;
+    return fin > inicio;
+  }
+
+async guardarHorarios() {
+  this.errorHorarios = '';
+    const seleccionados: any[] = [];
+
+    for (const dia of this.diasSemana) {
+      const info = this.disponibilidad[dia];
+
+      if (!info.disponible) continue;
+
+      if (!info.desde || !info.hasta) {
+        this.errorHorarios = `Completa el horario de ${dia}.`;
+        return;
+      }
+
+      if (!this.esRangoValido(info.desde, info.hasta)) {
+        this.errorHorarios = `El rango de ${dia} no es válido (Desde debe ser menor que Hasta).`;
+        return;
+      }
+
+      const horasGeneradas = this.generarIntervalos(info.desde, info.hasta);
+
+      horasGeneradas.forEach((h) => {
+        seleccionados.push({
+          id_especialista: this.usuario.id,
+          dia_semana: dia.toLowerCase(),
+          hora_inicio: h,
+        });
+      });
+    }
+
+    await this.horariosService.guardarDisponibilidad(
+      this.usuario.id,
+      seleccionados
+    );
+
+    this.snackBar.open('Disponibilidad actualizada.', 'Cerrar', {
+      duration: 3000,
+      panelClass: ['snackbar-ok'],
+    });
+  
 }
+
+
 
   volver() {
     if (this.rol == 'admin') this.router.navigate(['/admin']);

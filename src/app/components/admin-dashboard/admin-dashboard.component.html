@@ -35,15 +35,11 @@
         <span>Ver pacientes</span>
     </button>
 
-    <button class="btn-stats" (click)="irA('estadisticas')">
+    <button class="opcion" (click)="irA('estadisticas')">
+      <img src="svgs/estadistica.svg" alt="Turnos" />
   Estadísticas
 </button>
 
-    <button class="opcion" >
-        <img src="svgs/ver-turnos.svg" alt="Turnos" />
-        <span>Ver turnos por especialidad</span>
-
-    </button>
 
     <button class="opcion" (click)="irA('alta-admin')">
         <img src="svgs/admin.svg" alt="Turnos" />
@@ -51,8 +47,8 @@
       
     </button>
 
-    <button class="opcion">
-        <img src="svgs/solicitar.svg" alt="Turnos" />
+    <button class="opcion" (click)="irA('admin/turnos')">
+        <img src="svgs/solicitar.svg"  alt="Turnos" />
         <span>Solicitar turno</span>
       
     </button>
@@ -62,7 +58,7 @@
   <section class="usuarios-section">
     <div class="section-header">
       <h2>Gestión de Especialistas</h2>
-      <button class="btn-new-user" (click)="abrirModalNuevoUsuario()">+ Nuevo Usuario</button>
+      <button class="btn-new-user" (click)="irAltaUsuario()">+ Nuevo Usuario</button>
     </div>
 
     <table class="usuarios-table">

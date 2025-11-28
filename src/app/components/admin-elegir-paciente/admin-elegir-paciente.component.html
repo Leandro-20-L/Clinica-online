@@ -1,0 +1,25 @@
+<h2 class="titulo">Seleccione un paciente</h2>
+
+<div class="tabla-container">
+  <table class="tabla-pacientes">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let p of pacientes">
+        <td>{{ p.nombre }} {{ p.apellido }}</td>
+        <td>{{ p.mail }}</td>
+        <td>
+          <button class="btn-turno" (click)="SolicitarTurno(p)">
+            Solicitar turno
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

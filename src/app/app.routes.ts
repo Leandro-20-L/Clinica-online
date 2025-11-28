@@ -31,9 +31,21 @@ export const routes: Routes = [
     loadComponent: () => import('./components/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
     children: [
       
-      { path: 'solicitar/:idPaciente', component: SolicitarTurnoComponent }
+     
     ]
   },
+    { path: 'solicitar-turno/:idPaciente', loadComponent: () => import('./components/solicitar-turno/solicitar-turno.component').then(m => m.SolicitarTurnoComponent) },
+    {
+  path: 'admin/turnos',
+  loadComponent: () =>
+    import('./components/admin-elegir-paciente/admin-elegir-paciente.component')
+      .then(m => m.AdminElegirPacienteComponent)
+},
+{
+  path: 'admin/alta-usuario',
+  loadComponent: () => import('./components/register/register.component')
+                      .then(m => m.RegisterComponent)
+},
   {
     path: 'especialista',
     loadComponent: () => import('./components/dashboard-especialista/dashboard-especialista.component').then(m => m.DashboardEspecialistaComponent)

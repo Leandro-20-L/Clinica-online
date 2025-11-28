@@ -117,17 +117,17 @@ cerrarHistorias() {
     const texto = this.filtroTexto.toLowerCase().trim();
 
   this.turnosFiltrados = this.turnos.filter((t: any) => {
-    // 1) Filtro por estado (si se eligió uno)
+    //  Filtro por estado (si se eligió uno)
     if (this.filtro && this.filtro !== 'todos' && t.estado !== this.filtro) {
       return false;
     }
 
-    // 2) Si no hay texto, ya pasó el filtro de estado → mostrar
+   
     if (!texto) return true;
 
     const partes: string[] = [];
 
-    // ----- Datos del turno -----
+    
     partes.push(
       t.especialidad,
       t.fecha,
